@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Leads Rosebel | 05/11/26</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d213f;--navy2:#16355c;--blue:#2f6fe4;--gold:#d9a441;--ln:#3b5679;--tx:#eaf0f8;--mu:#9fb2cc}
+*{box-sizing:border-box}body{margin:0;background:#fff;color:#14233a;font:14px/1.4 Montserrat,Arial,sans-serif}
+header{max-width:1100px;margin:0 auto;padding:36px 20px 8px}h1{font-size:30px;margin:0;font-weight:600;letter-spacing:-.5px}
+header p{color:#5b6b82;margin:4px 0 18px}.bar{display:flex;gap:10px;flex-wrap:wrap;position:sticky;top:0;background:#fff;padding:10px 0;z-index:5}
+.bar input,.bar select{font:inherit;padding:10px 14px;border:1px solid #cfd8e6;border-radius:999px;min-width:200px}
+.bar input{flex:1}.cnt{align-self:center;color:#5b6b82;font-size:13px}
+main{max-width:1100px;margin:0 auto;padding:10px 20px 60px;display:grid;gap:44px}
+.card{background:linear-gradient(135deg,var(--navy),var(--navy2));color:var(--tx);border-radius:26px;border:1px solid var(--ln);box-shadow:0 24px 48px -18px rgba(13,33,63,.55);overflow:hidden;display:grid;grid-template-columns:1fr 230px}
+.in{padding:28px 30px}.tag{color:var(--gold);font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase}
+h2{font-size:26px;font-weight:500;margin:4px 0 18px}
+.ls{display:grid;grid-template-columns:1fr 1fr;gap:0 26px}
+.it{padding:10px 0;border-bottom:1px dotted var(--ln);display:flex;flex-direction:column;gap:3px;font-size:13px}
+.it b{font-weight:500;display:flex;gap:8px;align-items:center}.it small{color:var(--mu);font-size:11px}
+.ph{display:flex;gap:8px;flex-wrap:wrap}.ph a{color:#8fb6ff;text-decoration:none;font-weight:500}.ph a:hover{text-decoration:underline}
+.it input{accent-color:var(--blue);width:16px;height:16px}.it.done{opacity:.4}.it.done b span{text-decoration:line-through}
+.it.x{opacity:.3}.bd{font-size:9px;background:var(--gold);color:var(--navy);padding:1px 7px;border-radius:9px;font-weight:700}
+.side{background:linear-gradient(160deg,#27527f,#0a1830);padding:28px 22px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;border-left:1px solid var(--ln)}
+.side strong{font-size:56px;font-weight:300;line-height:1}.side span{color:var(--mu);font-size:12px}
+.btn{margin-top:14px;background:var(--blue);color:#fff;border:0;border-radius:999px;padding:11px 18px;font:600 12px Montserrat,Arial;cursor:pointer}
+.nm{cursor:pointer;border-bottom:1px dashed var(--gold)}.nm:hover{color:#fff;border-bottom-style:solid}
+.ov{position:fixed;inset:0;background:rgba(5,14,30,.7);display:none;align-items:center;justify-content:center;padding:16px;z-index:20}.ov.on{display:flex}
+.md{background:linear-gradient(135deg,var(--navy),var(--navy2));color:var(--tx);border:1px solid var(--ln);border-radius:26px;max-width:520px;width:100%;padding:26px 26px 22px;box-shadow:0 30px 60px -10px rgba(0,0,0,.6)}
+.md h3{margin:2px 0 12px;font-size:20px;font-weight:500}.md textarea{width:100%;height:210px;background:#0a1830;color:var(--tx);border:1px solid var(--ln);border-radius:16px;padding:14px;font:inherit;line-height:1.5;resize:vertical}
+.ac{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.ac .btn{margin:0}.btn.g{background:transparent;border:1px solid var(--ln);color:var(--tx)}.btn.w{background:#1fa855}.btn[disabled]{opacity:.4;pointer-events:none}
+.hide{display:none!important}
+@media(max-width:760px){.card{grid-template-columns:1fr}.side{flex-direction:row;align-items:center;border-left:0;border-top:1px solid var(--ln);justify-content:space-between}.ls{grid-template-columns:1fr}h1{font-size:24px}}
+</style></head><body>
+<header><h1>Leads Rosebel</h1><p>6 listas · 05/11/2026 · toque no número para chamar no WhatsApp e marque os que já ligou</p>
+<div class="bar"><input id="q" placeholder="Buscar nome, telefone ou empreendimento"><select id="f"><option value="">Todos os empreendimentos</option></select><select id="o"><option value="">Todas as origens</option></select><span class="cnt" id="n"></span></div></header>
+<main id="m"></main>
+<div class="ov" id="ov"><div class="md"><div class="tag">Mensagem pronta</div><h3 id="mh"></h3><textarea id="mt"></textarea><div class="ac"><button class="btn g" id="mv">Outra versão ↻</button><button class="btn" id="mc">Copiar</button><a class="btn w" id="mw" target="_blank" style="text-decoration:none">Chamar no WhatsApp →</a><button class="btn g" id="mx">Fechar</button></div></div></div>
+<script>
+const P={HB:'Home Boutique By Living - Anália Franco',GE:'The Gardens Eleya',GD:'Gran Diálogo Parque Da Mooca',PP:'Pátio Penha',LK:'Lucky - Praça Sílvio Romero',CS:'Club Station Parque Vila Ema',UE:'Universo Tatuapé - Esfera',RT:'Raízes Tatuapé',TG:'Trya Gamaro',VT:'Vista Tatuapé Boulevard',UO:'Universo Tatuapé - Órbita',TZ:'Terrazzo',AT:'Alameda Tatuapé Clube Residences',EG:'Edro Gamaro',TV:'Teg Vila Carrão',QD:'Quadra Diálogo Home Club',BV:'Bella Vita Mooca Home Clube',UA:'Universo Tatuapé - Astro',PV:'Parque Diálogo Vila Ema Residences',HR:'Home Resort Penha',GS:'Gran Spot',PD:'Praça Diálogo Patriarca',MM:'Monã Mooca',AU:'Auge Resort Tatuapé',OC:'Oásis Condomínio Clube - Vila Guilhermina',UR:'Urman São Paulo',PR:'Prisma Condomínio Clube Vila Ema',VI:'Vitrine Tatuapé Condomínio Clube'};
+const O={PL:'Portal Lopes',FB:'Facebook',SMS:'SMS',EM:'E-mail',WPP:'WhatsApp',ST:'Stand',IC:'Imóvel compartilhado'};
+// origem|empreendimento|nome|tel1|tel2|marca (ok = já tratado, x = descartado)
+const L=[
+{t:'Lista 1',s:'',d:`PL|HB|Marília||11952878620
+SMS|GE|Marina Maria da Silva|61984937200|11991950694
+FB|GD|Cristiano|1120931660|1986085032
+FB|GD|Daniela Souza Santos
+EM|PP|Liliane Maestro|11972612147|1183188080
+SMS|GE|Guilherme||11947640320
+FB|GD|Allex Santos||11995344339
+WPP|LK|Arlete Ventolim||11992219121
+WPP|LK|Cleidson Nascimento|1134766098|11974042828
+WPP|LK|Anderson Nascimento da Silva||11980913579
+WPP|LK|André Luiz||11966189367
+WPP|LK|Maribel Espinoza Cobarrubias|1123324176|11954813710
+WPP|LK|Larissa Alves de Lima||16981190611
+WPP|LK|Claudia Penteado||11998846225
+WPP|LK|Alan Nascimento|11983801775
+WPP|LK|Alan Castro||11991952997
+WPP|LK|Mayra Abreu||11948236763
+WPP|LK|Atila Marcelo Lanovelo|1145698123|11947510555
+WPP|LK|Antonio Luis Borges Gonçalves|11983638996
+WPP|LK|Wagner Goulart Siqueira||11977262018
+WPP|LK|Cintia de Morais Soares||11948797526
+WPP|LK|Beatriz Paulino||11949293803
+WPP|LK|Silvana e Nina|11943235660|1196191261
+PL|CS|Gabrielle Mendes||11992507647
+PL|UE|Mário Gonçalves|11966999029|11966969029
+FB|GD|Vivi Mercês||11991425352
+PL|RT|Milena|11986345244|11947174774
+FB|GD|Gabi Bastos||11957571012
+FB|GD|Giselma Santos||11996493589
+SMS|TG|Pedro|14991619107
+PL|LK|Elizabeth||11954290556
+FB|GD|Thiago Costa||11930353074
+PL|RT|Vivian|11918323813`},
+{t:'Lista 2',s:'Quinta-feira',d:`WPP|PP|Charles Mauricio Lopez|11991565888
+WPP|PP|Gabrielly Helena Farias Criscuolo||11913686160
+WPP|PP|Rodrigo Fornereto Mariano|11940356213|11942313870
+SMS|LK|Leandro Kuboyama|1132941547|11941568166
+SMS|LK|Andre Bernardo|11940204318
+PL|VT|Everson|11978362559|11971630725
+PL|UO|Isabella Vieira de Lima||11995249006
+PL|LK|Baraket Saade Said|1126470771|11977044744
+PL|TZ|Carolina Schulze Saccucci|11978682420|11991574740
+FB|GD|Danley Altino||14997373095
+PL|PP|Tereza Lau|11930468990
+PL|AT|Gabriela||11984530682|ok
+PL|PP|Renato Alberto Candeia da Costa||11962921541|x
+SMS|GE|Jenny||11974620352
+PL|EG|Fernanda Silva||18996914652
+PL|TV|Yasmim Monteiro Silva||11977212585
+PL|LK|Bianca Marquez||11998682521
+PL|LK|Bianca Marquez||11998682521
+PL|QD|Jonathan Heleno Mendes||11947730619
+PL|BV|Guilherme||11999105140
+PL|LK|Brenda Coimbra||11910187020
+PL|LK|Emily Simões||38999748312
+PL|UA|Maria Eduarda||11945813794
+PL|PP|Raissa Freitas Xavier||11997371532
+PL|PP|Raissa Freitas Xavier||11997371532
+PL|RT|Atiane Bezerra Garcia de Souza||11951954705
+SMS|LK|Elisvaldo Silva||11950724330
+ST|PV|Vitoria||11977247815
+PL|PP|Viviane Lemes de Almeida|11942078015|11979832286
+PL|PP|Viviane Lemes de Almeida|11942078015|11979832286
+PL|PP|Viviane Lemes de Almeida|11942078015|11979832286
+PL|PP|Victoria||11987872409
+FB|GD|Deliane Nascimento||11962135056`},
+{t:'Lista 3',s:'',d:`PL|LK|Lilian||11934886345
+PL|HR|Jaqueline Muynarsky||11931430718
+PL|BV|Ariane Lima Correa|11986271909
+FB|GD|Wilson Ramos Macieira||11982185052
+IC|LK|Leandro Spigolon||19981408192
+ST|GE|Jhanys Modas||11958404056
+FB|GE|Thataa Melo||13996393120
+FB|GE|Jhanys Modas||11958404056
+FB|GE|Gabriel Lipari Cruz||11982305578
+FB|GD|Bouesso Miambanzila Benoit Achtar||11953613447
+SMS|LK|Fernando Pereira||17981307735
+SMS|LK|Rodrigo Veiga|1120933817|11995964121
+SMS|LK|Eduarda||11974609360
+FB|GE|Roseni Melo||11949550177
+FB|GE|Josué Gomes Bragança Junior|11943651288
+EM|GE|Sidney Marcelo Beserra|11964748625|11999761811
+EM|GE|Dayane Chacon||11942346388
+EM|GE|Rosely Pasti|11963338961|11982994919
+EM|GE|Diogo de Araujo||11995852075
+EM|GE|Nathalia Ferreira||11941323222
+EM|GE|Valesca|11999845925
+FB|GE|Danilo Dalo Leandro||11978063814
+PL|TZ|Maria Iseuda de Sousa||11940011463
+PL|GS|Larissa||11959485141
+FB|GD|Clemilda Martins Santos de Araujo||11943994205
+FB|GE|Betinho Costa||11974681514
+FB|GE|Aline Rodrigues||11976547698
+PL|LK|Larissa Teixeira||11976283655
+WPP|LK|Elias Nunes Nadur|1124783459|11996985875
+ST|PD|Paula|11984607873|11994914994
+FB|GE|Roly Laura
+PL|MM|Siumara||11918243402
+PL|VT|Carollini Barreto||11920663132`},
+{t:'Lista 4',s:'',d:`PL|LK|Cassia Anacleto Lopes||43996620636
+FB|GE|Geane Moura|11989694825|1198969482
+FB|GE|Carlos Fagundes||11958517561
+PL|BV|Nanda Augusta Marques Marcos||11950520601
+PL|LK|Rafael Souza|21997565665|11997565665
+PL|LK|Patricia Oliveira||11983578705
+PL|TZ|Ellen Alixandrino Cois||11982140978
+PL|GS|Vera|51999748595|11959981710
+FB|GE|Juan Pablo Choque Quispe||11945255698
+FB|GE|Anderson Batista Macário||11987767056
+FB|GE|Agnaldo Moreira Mesquita||11995485364
+PL|UE|Nathalia Lima||11959014160
+FB|GE|Altair Mariano||11957894431
+FB|GE|Marcelo Silva||11945665762
+PL|AU|Tonimar Dal Aba|11998718235|11987711516
+PL|LK|Lucio Flavio||35992470163
+FB|GD|Rafael Santos||11949175314
+SMS|GE|Valdira Cruz||11954969566
+FB|GE|Felipe Sabino||11965179151
+FB|GD|Hermenegildo|21974880049|21992863243
+PL|EG|Paulo|43996984085|11981738945
+FB|GD|Elisangela Quintanilha||11987588767
+FB|GE|Augusto (Representante do Setor Moveleiro)||11937229151
+SMS|GE|Amelia|1194510769|11945100769
+SMS|GE|Danila|11994097484
+SMS|GE|Marcia Pereira|11988923049|11941727278
+PL|LK|Thiago||11959385861
+SMS|GE|Adriano Oleari Biachini|11993392149|11988004242
+ST|GE|Edgar Luiz|11995694189
+ST|GE|Vinícius||11947123138
+FB|GD|Rilma Hinjosa||11944444600
+FB|GD|Flavio Sep||11954680647
+FB|GD|Rosalia Lins||11953555660`},
+{t:'Lista 5',s:'Alemão',d:`FB|GD|Antonio Costa da Silva||11984300678
+FB|GD|Kátia Bia||11967740053
+FB|GD|Andréa Tank||11953849996
+FB|GE|Rodrigo Luis||11960706332
+FB|GD|Daniela Araujo||11953532264
+FB|GD|Vera Lúcia Ximenes||11965912554
+PL|BV|Rosana Ocana Almeida||11986375016
+PL|OC|Rogério Tavares Castro||11961939453
+FB|GD|Joao Zito||11985106554
+FB|GD|Marcelo Jorge||11999269150
+FB|GE|Nice||11961986563
+FB|GD|Thiago Buda||11949021139
+FB|GD|Vania Maria||11977176379
+FB|GD|Ricardo Fernandes Alves||11947713693
+PL|EG|Laís Braga||11942428085
+PL|LK|Rita||11954127813
+FB|GD|Rene Akilah
+PL|LK|João Victor||11966186149
+FB|GD|Flaudenir Silva||11960340319
+FB|GE|Renata Felix||11954762237
+FB|GE|Claudia Santos Tosta||11999422058
+FB|GD|Genario Bezerra||11969877986
+FB|GD|Flávio Soares dos Santos||11977315827
+FB|GE|Weverton Lucena||11949493697
+FB|GD|Roseane Batista||11960772318
+PL|CS|Fernando de Camargo||19996040408
+FB|GD|Paulo Alencar||11941811193
+PL|EG|Rafael Modesto Santana||11948717164
+FB|GD|Juliana Oliveira||11949167965
+FB|GD|Lika Santos||11914604453
+FB|GE|Vitória+vivo na derrota||11952958132
+FB|GE|Sabrina Carneiro||11958267009
+FB|GE|Bruna Lima Francattttvtgg||11981722674`},
+{t:'Lista 6',s:'Alemão',d:`PL|HR|Aiziane Santos de Souza||11994638132
+ST|GD|Philip Douglas Nunes Freitas||11941670018
+PL|EG|Thabata|99999999999
+FB|GD|Gabriele Costa||11984226892
+PL|RT|Miguel|11974918915|11990086336
+FB|GD|Veruska Honorato||11999487565
+FB|GD|Júnior Gonçalves||11986668573
+PL|LK|Patricia|13996632132|11972596107
+PL|EG|Jose Paulo|19997728490|11997037454
+ST|GE|Ricardo Barbosa||11959000047
+ST|GE|Adriana Barbosa||11959000047
+ST|GE|Andrea Sequeira de Azevedo|11964745047|11969051054
+ST|GE|Daniel Pereira de Barros|1196920636|11969206363
+FB|GD|Iandra Marques||11993372279
+PL|LK|Vittoria||11976520050
+PL|GE|Donato||11949100591
+PL|EG|Carlos Darvin de Sousa Gomes||85992976763
+FB|GD|Oliveira S||11948158684
+PL|PV|Sthefany Gomes||11983578915
+PL|UR|Cleber Vieira||11984869396
+PL|PR|Leonardo Lima Felix|11994846996|11988063121
+PL|UO|Julia||11968392372
+PL|PP|Jose Ricardo Ramos|1143715307|11986518388
+PL|UO|Felipe K O Oliveira||11912911737
+FB|GD|Herisson Araujo||11948219988
+FB|GD|Paola Beatriz||11992495139
+EM|LK|Maria Helena||11941302924
+EM|LK|Ari Souza|17969365388|11976959577
+PL|VI|Fatima|1333952655|11997010246
+PL|LK|Nathalia|11956543521|11976314676
+FB|GD|Raquel Silva|11973210084|11988242412
+FB|GE|Gerasmo Guerra||11982318984
+PL|EG|João Gabriel||21968928985`}];
+const fmt=n=>n.length==11?`(${n.slice(0,2)}) ${n[2]} ${n.slice(3,7)}-${n.slice(7)}`:n.length==10?`(${n.slice(0,2)}) ${n.slice(2,6)}-${n.slice(6)}`:n;
+const lk=n=>n.length==11?`https://wa.me/55${n}`:`tel:${n}`;
+const st=JSON.parse(localStorage.getItem('rosebel')||'{}'),seen={};let tot=0;
+const m=document.getElementById('m');
+L.forEach((l,li)=>{const rows=l.d.split('\n').map(r=>r.split('|'));tot+=rows.length;
+const its=rows.map((r,i)=>{const id=li+'-'+i,[o,p,nm,a,b,k]=r,key=nm.toLowerCase()+(a||b),dup=seen[key];seen[key]=1;
+const ph=[a,b].filter(Boolean).map(t=>`<a href="${lk(t)}" target="_blank">${fmt(t)}</a>`).join('')||'<small>sem telefone</small>';
+return `<div class="it ${k=='x'?'x':''} ${st[id]?'done':''}" data-id="${id}" data-s="${(nm+a+b+P[p]+O[o]).toLowerCase()}" data-p="${p}" data-o="${o}" data-ph="${[a,b].find(t=>t&&t.length==11)||''}"><b><input type="checkbox" ${st[id]||k=='ok'?'checked':''}><span class="nm" title="Ver mensagem">${nm}</span>${dup?'<i class="bd">REPETIDO</i>':''}</b><small>${P[p]} · ${O[o]}</small><div class="ph">${ph}</div></div>`}).join('');
+const top=Object.entries(rows.reduce((c,r)=>(c[r[1]]=(c[r[1]]||0)+1,c),{})).sort((a,b)=>b[1]-a[1])[0][0];
+m.insertAdjacentHTML('beforeend',`<section class="card"><div class="in"><div class="tag">Rosebel LN · 05/11/26${l.s?' · '+l.s:''}</div><h2>${l.t}</h2><div class="ls">${its}</div></div><aside class="side"><span>Mais frequente</span><span style="color:#fff;font-size:13px">${P[top]}</span><strong>${rows.length}</strong><span>leads nesta lista</span><button class="btn" onclick="this.closest('.card').querySelector('.it').scrollIntoView({behavior:'smooth',block:'center'})">Ver lista →</button></aside></section>`)});
+const f=document.getElementById('f'),o=document.getElementById('o'),q=document.getElementById('q'),n=document.getElementById('n');
+Object.entries(P).forEach(([k,v])=>f.add(new Option(v,k)));Object.entries(O).forEach(([k,v])=>o.add(new Option(v,k)));
+function run(){const t=q.value.toLowerCase().trim();let c=0;document.querySelectorAll('.it').forEach(e=>{const ok=(!t||e.dataset.s.includes(t))&&(!f.value||e.dataset.p==f.value)&&(!o.value||e.dataset.o==o.value);e.classList.toggle('hide',!ok);if(ok)c++});
+document.querySelectorAll('.card').forEach(s=>s.classList.toggle('hide',!s.querySelector('.it:not(.hide)')));n.textContent=c+' de '+tot+' leads'}
+[q,f,o].forEach(e=>e.addEventListener('input',run));run();
+m.addEventListener('change',e=>{const it=e.target.closest('.it');st[it.dataset.id]=e.target.checked;it.classList.toggle('done',e.target.checked);try{localStorage.setItem('rosebel',JSON.stringify(st))}catch(_){}});
+
+const T=[
+(n,e)=>`Oi, ${n}! Aqui é a Rosebel, da Lopes. 😊\n\nVi seu interesse no ${e} e separei pra você a tabela atualizada + uma simulação sob medida, grátis e sem compromisso.\n\nPosso te enviar agora? Responde só *SIM* que eu mando em 1 minuto. 🏡`,
+(n,e)=>`${n}, tudo bem? Rosebel, da Lopes. ☀️\n\nQuero te mostrar o que a maioria só descobre na visita: como a parcela do ${e} pode caber no seu bolso. Faço uma simulação rápida pra você, sem custo.\n\nMelhor pra você hoje: *manhã* ou *tarde*?`,
+(n,e)=>`Oi, ${n}! Rosebel, corretora da Lopes. 😉\n\nAinda está de olho em apartamento? Posso te mandar planta, valores e as unidades disponíveis do ${e} em 1 minuto, sem compromisso.\n\nPrefere receber por aqui ou uma ligação rápida? Responde *1* (aqui) ou *2* (ligação).`];
+let cur=null;
+const ov=document.getElementById('ov'),mt=document.getElementById('mt'),mw=document.getElementById('mw');
+function show(){const{fn,e,v}=cur;mt.value=T[v%3](fn,e);const ph=cur.it.dataset.ph;mw.style.display=ph?'':'none';upd()}
+function upd(){const ph=cur.it.dataset.ph;if(ph)mw.href='https://wa.me/55'+ph+'?text='+encodeURIComponent(mt.value)}
+m.addEventListener('click',ev=>{if(!ev.target.classList.contains('nm'))return;const it=ev.target.closest('.it'),nm=ev.target.textContent,w=(nm.match(/^\p{L}+/u)||[nm])[0];
+cur={it,fn:w[0].toUpperCase()+w.slice(1).toLowerCase(),e:P[it.dataset.p].split(' - ')[0],v:[...nm].reduce((a,c)=>a+c.charCodeAt(0),0)%3};
+document.getElementById('mh').textContent=nm;document.getElementById('mc').textContent='Copiar';show();ov.classList.add('on')});
+mt.addEventListener('input',upd);
+document.getElementById('mv').onclick=()=>{cur.v++;show()};
+document.getElementById('mc').onclick=async function(){try{await navigator.clipboard.writeText(mt.value)}catch(_){mt.select();document.execCommand('copy')}this.textContent='Copiado ✓'};
+const cl=()=>ov.classList.remove('on');document.getElementById('mx').onclick=cl;ov.addEventListener('click',ev=>{if(ev.target===ov)cl()});addEventListener('keydown',ev=>{if(ev.key=='Escape')cl()});
+</script></body></html>
