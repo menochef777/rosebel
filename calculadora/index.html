@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Simulador Financeiro & Imobiliário | Rosebel Lopes</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --navy-900: #071527;
+      --navy-800: #0d213f;
+      --navy-700: #16355c;
+      --navy-600: #1e4679;
+      --blue-accent: #2563eb;
+      --blue-light: #60a5fa;
+      --gold-500: #d9a441;
+      --gold-400: #eab308;
+      --gold-glow: rgba(217, 164, 65, 0.25);
+      --emerald-500: #10b981;
+      --tx-primary: #0f172a;
+      --tx-secondary: #475569;
+      --tx-light: #f8fafc;
+      --tx-muted: #94a3b8;
+      --bg-page: #f8fafc;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --card-border: rgba(226, 232, 240, 0.85);
+      --glass-shadow: 0 20px 40px -15px rgba(13, 33, 63, 0.08);
+      --font-main: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-display: 'Montserrat', sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-page);
+      color: var(--tx-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(224, 242, 254, 0.7) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(254, 243, 199, 0.45) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(241, 245, 249, 0.8) 0px, transparent 50%);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ticker de Cotações */
+    .ticker-bar {
+      background: var(--navy-900);
+      color: var(--tx-muted);
+      font-size: 12px;
+      padding: 8px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ticker-val {
+      color: #38bdf8;
+      font-weight: 700;
+      font-feature-settings: "tnum";
+    }
+    .ticker-up { color: #34d399; }
+    .ticker-live-dot {
+      width: 6px;
+      height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Header Principal */
+    header {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 20px 24px;
+      text-align: center;
+    }
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(13, 33, 63, 0.05);
+      border: 1px solid rgba(13, 33, 63, 0.12);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--navy-800);
+      margin-bottom: 14px;
+    }
+    .brand-pill span {
+      color: var(--gold-500);
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      color: var(--navy-900);
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    h1 .highlight {
+      background: linear-gradient(135deg, var(--navy-800), var(--blue-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    header p {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--tx-secondary);
+      max-width: 640px;
+      margin: 0 auto 28px;
+      font-weight: 400;
+    }
+
+    /* Container do Simulador */
+    .app-container {
+      max-width: 1140px;
+      margin: 0 auto 80px;
+      padding: 0 16px;
+    }
+
+    /* Navegação por Abas */
+    .tabs-nav {
+      display: flex;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      padding: 8px;
+      border-radius: 18px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    }
+    .tabs-nav::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      flex: 1;
+      min-width: 160px;
+      padding: 13px 18px;
+      border: none;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--tx-secondary);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      color: var(--navy-900);
+      background: rgba(13, 33, 63, 0.04);
+    }
+    .tab-btn.active {
+      background: var(--navy-900);
+      color: #ffffff;
+      box-shadow: 0 8px 20px -4px rgba(7, 21, 39, 0.25);
+    }
+    .tab-btn .badge-pill {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--gold-400);
+      font-weight: 700;
+    }
+
+    /* Grid do Formulário e Resultados */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 920px) {
+      .calc-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cartão Principal */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: var(--glass-shadow);
+      position: relative;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy-900);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-subtitle {
+      font-size: 13.5px;
+      color: var(--tx-secondary);
+      margin-bottom: 24px;
+    }
+
+    /* Grupos de Inputs */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy-800);
+      margin-bottom: 8px;
+    }
+    .form-label small {
+      color: var(--tx-muted);
+      font-weight: 400;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-prefix {
+      position: absolute;
+      left: 16px;
+      color: var(--tx-muted);
+      font-weight: 600;
+      font-size: 14px;
+      pointer-events: none;
+    }
+    .form-input {
+      width: 100%;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--navy-900);
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 13px 16px 13px 44px;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .form-input:focus {
+      background: #ffffff;
+      border-color: var(--blue-accent);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+    .form-input.no-prefix {
+      padding-left: 16px;
+    }
+
+    /* Sliders Rápidos */
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    input[type=range] {
+      flex: 1;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 6px;
+      outline: none;
+      -webkit-appearance: none;
+      accent-color: var(--navy-800);
+    }
+
+    /* Botões de Ação */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .btn-calc {
+      flex: 2;
+      background: linear-gradient(135deg, var(--navy-800), var(--navy-900));
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      padding: 15px 22px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      box-shadow: 0 10px 22px -5px rgba(13, 33, 63, 0.3);
+    }
+    .btn-calc:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -6px rgba(13, 33, 63, 0.4);
+    }
+    .btn-calc:active {
+      transform: translateY(0);
+    }
+    .btn-clear {
+      flex: 1;
+      background: #f1f5f9;
+      color: var(--tx-secondary);
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 15px 18px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .btn-clear:hover {
+      background: #e2e8f0;
+      color: var(--navy-900);
+    }
+
+    /* Painel de Resultados (Direita) */
+    .results-panel {
+      background: linear-gradient(145deg, var(--navy-900) 0%, var(--navy-800) 100%);
+      color: #ffffff;
+      border-radius: 26px;
+      padding: 34px 28px;
+      box-shadow: 0 25px 50px -12px rgba(7, 21, 39, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 24px;
+    }
+    .results-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding-bottom: 18px;
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .results-badge {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(217, 164, 65, 0.18);
+      color: var(--gold-400);
+      border: 1px solid rgba(217, 164, 65, 0.35);
+    }
+    .primary-metric {
+      margin-bottom: 24px;
+    }
+    .metric-label {
+      font-size: 13px;
+      color: var(--tx-muted);
+      margin-bottom: 4px;
+    }
+    .metric-value-huge {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 4vw, 2.9rem);
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+    .metric-sub {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 4px;
+    }
+
+    /* Grid de Métricas Secundárias */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .metric-box small {
+      display: block;
+      color: var(--tx-muted);
+      font-size: 11.5px;
+      margin-bottom: 2px;
+    }
+    .metric-box strong {
+      font-size: 16px;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* Gráfico de Distribuição */
+    .ratio-bar {
+      margin-bottom: 24px;
+    }
+    .ratio-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      margin-bottom: 6px;
+      color: var(--tx-muted);
+    }
+    .ratio-progress {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      display: flex;
+      overflow: hidden;
+    }
+    .ratio-fin {
+      background: var(--blue-accent);
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+    .ratio-juros {
+      background: var(--gold-500);
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+
+    /* Botão de WhatsApp Rosebel */
+    .btn-wpp-lead {
+      width: 100%;
+      background: #1fa855;
+      color: #ffffff;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 20px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 10px 25px -4px rgba(31, 168, 85, 0.4);
+    }
+    .btn-wpp-lead:hover {
+      background: #1b934b;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -5px rgba(31, 168, 85, 0.5);
+    }
+
+    /* Footer da Rosebel */
+    footer {
+      max-width: 1140px;
+      margin: 40px auto;
+      text-align: center;
+      padding: 20px;
+      color: var(--tx-muted);
+      font-size: 13px;
+      border-top: 1px solid #e2e8f0;
+    }
+    footer b { color: var(--navy-800); }
+  </style>
+</head>
+<body>
+
+  <!-- Cotações ao Vivo -->
+  <div class="ticker-bar">
+    <div class="ticker-item">
+      <div class="ticker-live-dot"></div>
+      <span>Câmbio Bacen Hoje:</span>
+    </div>
+    <div class="ticker-item">
+      <span>USD/BRL Comercial:</span>
+      <span class="ticker-val" id="tk-usd">R$ 5,74</span>
+    </div>
+    <div class="ticker-item">
+      <span>EUR/BRL Euro:</span>
+      <span class="ticker-val" id="tk-eur">R$ 6,05</span>
+    </div>
+    <div class="ticker-item">
+      <span>Taxa Selic Referência:</span>
+      <span class="ticker-val">11,25% a.a.</span>
+    </div>
+  </div>
+
+  <!-- Header Institucional Rosebel -->
+  <header>
+    <div class="brand-pill">
+      <span>★</span> Rosebel Lopes · Assessoria Imobiliária
+    </div>
+    <h1>Simulador Financeiro de <span class="highlight">Imóveis & Financiamentos</span></h1>
+    <p>Calcule prestações pela Tabela SAC ou Price, simule amortizações antecipadas e descubra o Custo Efetivo Real do seu crédito imobiliário.</p>
+  </header>
+
+  <!-- Aplicação Principal -->
+  <main class="app-container">
+    
+    <!-- Seletor de Módulos (Abas) -->
+    <nav class="tabs-nav" role="tablist">
+      <button class="tab-btn active" onclick="switchTab('imob')" id="tab-btn-imob">
+        🏠 Imobiliário <span class="badge-pill">SAC / Price</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('quit')" id="tab-btn-quit">
+        💰 Quitação & Desconto
+      </button>
+      <button class="tab-btn" onclick="switchTab('veic')" id="tab-btn-veic">
+        🚗 Financiamento Veicular
+      </button>
+      <button class="tab-btn" onclick="switchTab('cet')" id="tab-btn-cet">
+        📑 Custo Efetivo (CET)
+      </button>
+    </nav>
+
+    <div class="calc-grid">
+      
+      <!-- Formulário Dinâmico (Esquerda) -->
+      <section class="glass-card">
+        
+        <!-- Módulo 1: Imobiliário -->
+        <div id="mod-imob" class="calc-module">
+          <div class="card-title">Simulação de Crédito Imobiliário</div>
+          <div class="card-subtitle">Planeje as parcelas e juros do seu apartamento ou casa na planta/pronto.</div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <span>Valor do Imóvel</span>
+              <small id="lbl-imovel">R$ 650.000</small>
+            </label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="imob-valor" class="form-input" value="650000" step="10000">
+            </div>
+            <div class="range-row">
+              <input type="range" id="imob-valor-range" min="150000" max="3000000" step="10000" value="650000">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <span>Valor de Entrada</span>
+              <small id="lbl-entrada">(Mínimo sugerido: 20%)</small>
+            </label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="imob-entrada" class="form-input" value="130000" step="5000">
+            </div>
+          </div>
+
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div>
+              <label class="form-label">Taxa Anual (%)</label>
+              <div class="input-wrapper">
+                <input type="number" id="imob-taxa" class="form-input no-prefix" value="9.9" step="0.1">
+              </div>
+            </div>
+            <div>
+              <label class="form-label">Prazo (Anos)</label>
+              <div class="input-wrapper">
+                <input type="number" id="imob-prazo-anos" class="form-input no-prefix" value="30" min="1" max="35">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Sistema de Amortização</label>
+            <div style="display: flex; gap: 12px;">
+              <label style="flex: 1; padding: 12px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px; font-weight: 600;">
+                <input type="radio" name="amort-sys" value="sac" checked>
+                SAC (Parcelas Decrescentes)
+              </label>
+              <label style="flex: 1; padding: 12px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px; font-weight: 600;">
+                <input type="radio" name="amort-sys" value="price">
+                PRICE (Parcelas Fixas)
+              </label>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-calc" onclick="calcularImobiliario()">
+              ⚡ Recalcular Simulação
+            </button>
+            <button class="btn-clear" onclick="limparImobiliario()">
+              Limpar
+            </button>
+          </div>
+        </div>
+
+        <!-- Módulo 2: Quitação / Antecipação -->
+        <div id="mod-quit" class="calc-module" style="display: none;">
+          <div class="card-title">Amortização Antecipada & Quitação</div>
+          <div class="card-subtitle">Descubra quanto você economiza em juros ao amortizar parcelas de trás para frente.</div>
+
+          <div class="form-group">
+            <label class="form-label">Saldo Devedor Atual</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="quit-saldo" class="form-input" value="320000" step="5000">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Valor que deseja amortizar hoje</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="quit-aporte" class="form-input" value="30000" step="2000">
+            </div>
+          </div>
+
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div>
+              <label class="form-label">Taxa do Contrato (% a.a.)</label>
+              <input type="number" id="quit-taxa" class="form-input no-prefix" value="10.2" step="0.1">
+            </div>
+            <div>
+              <label class="form-label">Parcelas Restantes</label>
+              <input type="number" id="quit-meses" class="form-input no-prefix" value="280">
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-calc" onclick="calcularQuitacao()">
+              ⚡ Calcular Economia de Juros
+            </button>
+          </div>
+        </div>
+
+        <!-- Módulo 3: Veicular -->
+        <div id="mod-veic" class="calc-module" style="display: none;">
+          <div class="card-title">Simulação de Veículos</div>
+          <div class="card-subtitle">Cálculo de prestações e Custo Efetivo para carros e utilitários.</div>
+
+          <div class="form-group">
+            <label class="form-label">Valor do Veículo</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="veic-valor" class="form-input" value="95000" step="5000">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Valor da Entrada</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="veic-entrada" class="form-input" value="25000" step="2000">
+            </div>
+          </div>
+
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div>
+              <label class="form-label">Taxa Mensal (% a.m.)</label>
+              <input type="number" id="veic-taxa" class="form-input no-prefix" value="1.49" step="0.05">
+            </div>
+            <div>
+              <label class="form-label">Prazo (Meses)</label>
+              <input type="number" id="veic-prazo" class="form-input no-prefix" value="48">
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-calc" onclick="calcularVeicular()">
+              ⚡ Calcular Prestação
+            </button>
+          </div>
+        </div>
+
+        <!-- Módulo 4: Custo Efetivo Total (CET) -->
+        <div id="mod-cet" class="calc-module" style="display: none;">
+          <div class="card-title">Cálculo do CET (Custo Efetivo Real)</div>
+          <div class="card-subtitle">Entenda as taxas ocultas, seguros obrigatórios (DFI/MIP) e IOF.</div>
+
+          <div class="form-group">
+            <label class="form-label">Valor Líquido Desejado</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="cet-valor" class="form-input" value="400000">
+            </div>
+          </div>
+
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div>
+              <label class="form-label">Tarifa de Avaliação / TAC</label>
+              <input type="number" id="cet-tarifa" class="form-input no-prefix" value="3500">
+            </div>
+            <div>
+              <label class="form-label">Seguros e Taxas Mensais</label>
+              <input type="number" id="cet-seguro" class="form-input no-prefix" value="120">
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-calc" onclick="calcularCET()">
+              ⚡ Apurar CET Real
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Painel de Resultados (Direita) -->
+      <aside class="results-panel">
+        <div class="results-header">
+          <span class="results-badge">Projeção Bacen</span>
+          <span style="font-size: 12px; color: var(--tx-muted);" id="res-tipo-label">SAC Imobiliário</span>
+        </div>
+
+        <div class="primary-metric">
+          <div class="metric-label" id="res-lbl-principal">Primeira Parcela (Estimada)</div>
+          <div class="metric-value-huge" id="res-val-principal">R$ 5.733,33</div>
+          <div class="metric-sub" id="res-val-sub">Última parcela estimada em R$ 1.455,56</div>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <small>Valor Financiado</small>
+            <strong id="res-financiado">R$ 520.000</strong>
+          </div>
+          <div class="metric-box">
+            <small>Total em Juros</small>
+            <strong id="res-juros" style="color: #fcd34d;">R$ 774.800</strong>
+          </div>
+          <div class="metric-box">
+            <small>Total Acumulado</small>
+            <strong id="res-total">R$ 1.294.800</strong>
+          </div>
+          <div class="metric-box">
+            <small>Prazo Total</small>
+            <strong id="res-prazo">360 meses</strong>
+          </div>
+        </div>
+
+        <div class="ratio-bar">
+          <div class="ratio-labels">
+            <span>Capital Financiado (<span id="pct-cap">40%</span>)</span>
+            <span>Juros Totais (<span id="pct-jur">60%</span>)</span>
+          </div>
+          <div class="ratio-progress">
+            <div class="ratio-fin" id="bar-fin" style="width: 40%;"></div>
+            <div class="ratio-juros" id="bar-jur" style="width: 60%;"></div>
+          </div>
+        </div>
+
+        <!-- CTA Direto WhatsApp Rosebel -->
+        <a id="btn-wpp" href="#" target="_blank" class="btn-wpp-lead">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.062-2.146-.539-1.859-.769-3.056-2.656-3.149-2.779-.093-.124-.755-.999-.755-1.906 0-.906.474-1.353.644-1.538.169-.186.371-.231.496-.231.124 0 .248.001.357.006.113.006.264-.042.413.315.154.372.525 1.28.571 1.374.047.093.078.202.016.326-.062.125-.093.202-.186.311-.093.109-.196.243-.28.326-.093.093-.19.196-.082.383.109.186.483.797 1.036 1.289.711.633 1.31.83 1.496.923.186.093.295.078.404-.047.109-.124.466-.542.59-.728.125-.186.248-.155.418-.093.169.062 1.077.508 1.262.601.186.093.31.14.357.217.047.078.047.45-.097.855z"/>
+          </svg>
+          Enviar Simulação para Rosebel Lopes
+        </a>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <p><b>Rosebel Lopes</b> · Corretora de Imóveis · Simulador de Amortização & Crédito Imobiliário</p>
+    <p style="margin-top: 4px; font-size: 11.5px;">Valores e simulações para fins de referência. As taxas reais e concessão de crédito dependem de aprovação bancária e do Banco Central.</p>
+  </footer>
+
+  <script>
+    // Formatação de Moeda
+    const fmtMoeda = (val) => Number(val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    // Alternar Abas
+    function switchTab(modId) {
+      document.querySelectorAll('.calc-module').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      
+      document.getElementById('mod-' + modId).style.display = 'block';
+      document.getElementById('tab-btn-' + modId).classList.add('active');
+
+      if (modId === 'imob') calcularImobiliario();
+      else if (modId === 'quit') calcularQuitacao();
+      else if (modId === 'veic') calcularVeicular();
+      else if (modId === 'cet') calcularCET();
+    }
+
+    // Sincronizar Sliders
+    const imobSlider = document.getElementById('imob-valor-range');
+    const imobInput = document.getElementById('imob-valor');
+    imobSlider.addEventListener('input', (e) => {
+      imobInput.value = e.target.value;
+      document.getElementById('imob-entrada').value = Math.round(e.target.value * 0.2);
+      calcularImobiliario();
+    });
+    imobInput.addEventListener('input', (e) => {
+      imobSlider.value = e.target.value;
+      calcularImobiliario();
+    });
+
+    // 1. Cálculo Imobiliário (SAC / PRICE)
+    function calcularImobiliario() {
+      const valor = parseFloat(document.getElementById('imob-valor').value) || 0;
+      const entrada = parseFloat(document.getElementById('imob-entrada').value) || 0;
+      const taxaAnual = (parseFloat(document.getElementById('imob-taxa').value) || 9.9) / 100;
+      const anos = parseInt(document.getElementById('imob-prazo-anos').value) || 30;
+      const meses = anos * 12;
+      const sistema = document.querySelector('input[name="amort-sys"]:checked').value;
+
+      const financiado = Math.max(0, valor - entrada);
+      const taxaMensal = Math.pow(1 + taxaAnual, 1 / 12) - 1;
+
+      let p1 = 0, pUlt = 0, totalJuros = 0, totalPago = 0;
+
+      if (sistema === 'sac') {
+        const amortizacaoMensal = financiado / meses;
+        p1 = amortizacaoMensal + (financiado * taxaMensal);
+        pUlt = amortizacaoMensal + (amortizacaoMensal * taxaMensal);
+        // Soma da PA de juros
+        totalJuros = (meses * (financiado * taxaMensal + amortizacaoMensal * taxaMensal)) / 2;
+        totalPago = financiado + totalJuros;
+
+        document.getElementById('res-tipo-label').innerText = 'SAC (Decrescente)';
+        document.getElementById('res-lbl-principal').innerText = 'Primeira Parcela (SAC)';
+        document.getElementById('res-val-principal').innerText = fmtMoeda(p1);
+        document.getElementById('res-val-sub').innerText = 'Última parcela estimada em ' + fmtMoeda(pUlt);
+      } else {
+        // Tabela PRICE
+        const parcelaFixa = financiado * (taxaMensal * Math.pow(1 + taxaMensal, meses)) / (Math.pow(1 + taxaMensal, meses) - 1);
+        p1 = parcelaFixa;
+        pUlt = parcelaFixa;
+        totalPago = parcelaFixa * meses;
+        totalJuros = totalPago - financiado;
+
+        document.getElementById('res-tipo-label').innerText = 'PRICE (Fixa)';
+        document.getElementById('res-lbl-principal').innerText = 'Parcela Mensal Fixa';
+        document.getElementById('res-val-principal').innerText = fmtMoeda(parcelaFixa);
+        document.getElementById('res-val-sub').innerText = 'Parcela idêntica ao longo de todos os ' + meses + ' meses';
+      }
+
+      atualizarMetricas({
+        financiado,
+        totalJuros,
+        totalPago,
+        prazo: meses + ' meses',
+        msg: `Olá Rosebel, fiz uma simulação no seu site:\n• Imóvel: ${fmtMoeda(valor)}\n• Entrada: ${fmtMoeda(entrada)}\n• Financiamento: ${fmtMoeda(financiado)} (${sistema.toUpperCase()})\n• 1ª Parcela: ${fmtMoeda(p1)}\nGostaria de mais detalhes!`
+      });
+    }
+
+    // 2. Cálculo Quitação / Antecipação
+    function calcularQuitacao() {
+      const saldo = parseFloat(document.getElementById('quit-saldo').value) || 0;
+      const aporte = parseFloat(document.getElementById('quit-aporte').value) || 0;
+      const taxaAnual = (parseFloat(document.getElementById('quit-taxa').value) || 10) / 100;
+      const taxaMensal = Math.pow(1 + taxaAnual, 1 / 12) - 1;
+      const meses = parseInt(document.getElementById('quit-meses').value) || 240;
+
+      // Estimativa de economia de juros futuros
+      const economiaJuros = aporte * (taxaMensal * (meses / 2));
+      const novoSaldo = Math.max(0, saldo - aporte);
+
+      document.getElementById('res-tipo-label').innerText = 'Amortização Antecipada';
+      document.getElementById('res-lbl-principal').innerText = 'Economia Estimada de Juros';
+      document.getElementById('res-val-principal').innerText = fmtMoeda(economiaJuros);
+      document.getElementById('res-val-sub').innerText = 'Novo Saldo Devedor: ' + fmtMoeda(novoSaldo);
+
+      atualizarMetricas({
+        financiado: novoSaldo,
+        totalJuros: economiaJuros,
+        totalPago: saldo - economiaJuros,
+        prazo: meses + ' meses',
+        msg: `Olá Rosebel, simulei uma amortização antecipada de ${fmtMoeda(aporte)} sobre meu saldo devedor e quero avaliar opções de crédito com você!`
+      });
+    }
+
+    // 3. Cálculo Veicular
+    function calcularVeicular() {
+      const valor = parseFloat(document.getElementById('veic-valor').value) || 0;
+      const entrada = parseFloat(document.getElementById('veic-entrada').value) || 0;
+      const taxaMensal = (parseFloat(document.getElementById('veic-taxa').value) || 1.49) / 100;
+      const prazo = parseInt(document.getElementById('veic-prazo').value) || 48;
+
+      const financiado = Math.max(0, valor - entrada);
+      const parcela = financiado * (taxaMensal * Math.pow(1 + taxaMensal, prazo)) / (Math.pow(1 + taxaMensal, prazo) - 1);
+      const totalPago = parcela * prazo;
+      const juros = totalPago - financiado;
+
+      document.getElementById('res-tipo-label').innerText = 'Crédito Veicular';
+      document.getElementById('res-lbl-principal').innerText = 'Parcela Mensal Estimada';
+      document.getElementById('res-val-principal').innerText = fmtMoeda(parcela);
+      document.getElementById('res-val-sub').innerText = 'Plano de ' + prazo + ' parcelas fixas';
+
+      atualizarMetricas({
+        financiado,
+        totalJuros: juros,
+        totalPago,
+        prazo: prazo + ' meses',
+        msg: `Olá Rosebel, simulei um financiamento veicular no valor de ${fmtMoeda(valor)} com ${prazo}x de ${fmtMoeda(parcela)} e gostaria de orientação!`
+      });
+    }
+
+    // 4. Cálculo CET
+    function calcularCET() {
+      const valor = parseFloat(document.getElementById('cet-valor').value) || 0;
+      const tarifa = parseFloat(document.getElementById('cet-tarifa').value) || 0;
+      const seguroMensal = parseFloat(document.getElementById('cet-seguro').value) || 0;
+      const totalEncargos = tarifa + (seguroMensal * 12);
+
+      document.getElementById('res-tipo-label').innerText = 'Análise de CET';
+      document.getElementById('res-lbl-principal').innerText = 'Encargos e Taxas Anuais';
+      document.getElementById('res-val-principal').innerText = fmtMoeda(totalEncargos);
+      document.getElementById('res-val-sub').innerText = 'Inclui DFI/MIP, seguros e tarifa de cadastro bancária';
+
+      atualizarMetricas({
+        financiado: valor,
+        totalJuros: totalEncargos,
+        totalPago: valor + totalEncargos,
+        prazo: '12 meses ref.',
+        msg: `Olá Rosebel, quero comparar o Custo Efetivo Total (CET) dos bancos para meu financiamento imobiliário!`
+      });
+    }
+
+    // Atualização Geral de UI e Gráfico
+    function atualizarMetricas({ financiado, totalJuros, totalPago, prazo, msg }) {
+      document.getElementById('res-financiado').innerText = fmtMoeda(financiado);
+      document.getElementById('res-juros').innerText = fmtMoeda(totalJuros);
+      document.getElementById('res-total').innerText = fmtMoeda(totalPago);
+      document.getElementById('res-prazo').innerText = prazo;
+
+      const total = financiado + totalJuros;
+      const pctFin = total > 0 ? Math.round((financiado / total) * 100) : 50;
+      const pctJur = 100 - pctFin;
+
+      document.getElementById('pct-cap').innerText = pctFin + '%';
+      document.getElementById('pct-jur').innerText = pctJur + '%';
+      document.getElementById('bar-fin').style.width = pctFin + '%';
+      document.getElementById('bar-jur').style.width = pctJur + '%';
+
+      // Link Dinâmico WhatsApp Rosebel
+      const wppUrl = `https://wa.me/5511991950694?text=${encodeURIComponent(msg)}`;
+      document.getElementById('btn-wpp').href = wppUrl;
+    }
+
+    // Fetch Cotações Reais (API Bacen/AwesomeAPI com fallback suave)
+    async function carregarCotacoes() {
+      try {
+        const res = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.USDBRL) document.getElementById('tk-usd').innerText = 'R$ ' + parseFloat(data.USDBRL.bid).toFixed(2);
+          if (data.EURBRL) document.getElementById('tk-eur').innerText = 'R$ ' + parseFloat(data.EURBRL.bid).toFixed(2);
+        }
+      } catch (e) {
+        console.log('Usando taxas locais');
+      }
+    }
+
+    function limparImobiliario() {
+      document.getElementById('imob-valor').value = 500000;
+      document.getElementById('imob-entrada').value = 100000;
+      document.getElementById('imob-taxa').value = 9.9;
+      document.getElementById('imob-prazo-anos').value = 30;
+      calcularImobiliario();
+    }
+
+    // Inicialização
+    calcularImobiliario();
+    carregarCotacoes();
+  </script>
+</body>
+</html>

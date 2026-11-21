@@ -1,0 +1,32 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "^(simulador|calculadora)\\..*"
+        }
+      ],
+      "destination": "/calculadora/index.html"
+    },
+    {
+      "source": "/calculadora",
+      "destination": "/calculadora/index.html"
+    },
+    {
+      "source": "/simulador",
+      "destination": "/calculadora/index.html"
+    },
+    {
+      "source": "/leads",
+      "destination": "/leads.html"
+    },
+    {
+      "source": "/contatos",
+      "destination": "/leads.html"
+    }
+  ]
+}
