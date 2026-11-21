@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
-  <title>Simulador Financeiro · Rosebel Lopes</title>
+  <title>Simulador Imobiliário · Rosebel Lopes</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
   <style>
-    /* Duas cores principais: Base Dark Confortável (#090e17) + Accent Cyan/Blue (#38bdf8) */
+    /* 2 Paletas de Cores: Dark Confortável (#080c14 / #0e1624) + Cyan Suave (#38bdf8) */
     :root {
       --bg: #080c14;
       --surface: #0e1624;
@@ -21,7 +21,6 @@
       --tx-muted: #94a3b8;
       --accent: #38bdf8;
       --accent-deep: #0284c7;
-      --accent-bg: rgba(56, 189, 248, 0.08);
       --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -61,6 +60,7 @@
       font-size: 15px;
       font-weight: 800;
       color: var(--tx);
+      text-decoration: none;
     }
     .brand-dot {
       width: 8px;
@@ -84,7 +84,7 @@
     /* Container Principal */
     .container {
       width: 100%;
-      max-width: 1100px;
+      max-width: 980px;
       margin: 0 auto;
       padding: 16px 14px 60px;
     }
@@ -153,7 +153,7 @@
 
     .grid-fields {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 14px;
       margin-bottom: 18px;
     }
@@ -183,6 +183,7 @@
       font-weight: 700;
       outline: none;
       transition: border 0.2s ease;
+      font-feature-settings: "tnum";
     }
     .field-inp:focus {
       border-color: var(--border-focus);
@@ -211,6 +212,49 @@
       transition: background 0.15s ease;
     }
     .btn-action:hover { background: #0369a1; }
+
+    /* Header Resumo Idêntico ao APK */
+    .apk-summary-banner {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 18px;
+    }
+    .apk-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px 24px;
+    }
+    .apk-summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13.5px;
+    }
+    .apk-summary-item span:first-child {
+      color: var(--tx-muted);
+      font-weight: 600;
+    }
+    .apk-summary-item strong {
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 15px;
+      font-feature-settings: "tnum";
+    }
+
+    .system-pill-banner {
+      background: #0284c7;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      text-align: center;
+      border-radius: 8px;
+      margin: 16px 0 12px;
+    }
 
     /* Relatório */
     .report-card {
@@ -264,41 +308,11 @@
       cursor: pointer;
     }
 
-    /* Grid de Métricas */
-    .metrics-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 10px;
-      margin-bottom: 22px;
-    }
-    .metric-item {
-      background: var(--surface-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 13px 15px;
-    }
-    .metric-item small {
-      display: block;
-      color: var(--tx-muted);
-      font-size: 10.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      margin-bottom: 3px;
-    }
-    .metric-item strong {
-      font-size: 17px;
-      font-weight: 800;
-      color: var(--tx);
-      font-feature-settings: "tnum";
-    }
-    .metric-item.focus strong {
-      color: var(--accent);
-    }
-
     /* Tabela sem vazamento lateral */
     .tbl-scroll-box {
       width: 100%;
+      max-height: 520px;
+      overflow-y: auto;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       border: 1px solid var(--border);
@@ -307,9 +321,8 @@
     }
     .tbl {
       width: 100%;
-      min-width: 440px;
       border-collapse: collapse;
-      font-size: 12.5px;
+      font-size: 13px;
       text-align: right;
     }
     .tbl th {
@@ -317,15 +330,18 @@
       top: 0;
       background: var(--surface);
       color: var(--tx-muted);
-      padding: 10px 12px;
-      font-weight: 700;
-      font-size: 11px;
+      padding: 10px 14px;
+      font-weight: 800;
+      font-size: 12px;
       text-transform: uppercase;
       border-bottom: 1px solid var(--border);
+      z-index: 2;
     }
-    .tbl th:first-child, .tbl td:first-child { text-align: center; width: 44px; }
+    .tbl th:first-child, .tbl td:first-child { text-align: center; width: 50px; }
+    .tbl th.col-prest, .tbl td.col-prest { color: var(--accent); font-weight: 800; }
+    .tbl th.col-saldo, .tbl td.col-saldo { color: #f87171; font-weight: 700; }
     .tbl td {
-      padding: 9px 12px;
+      padding: 10px 14px;
       border-bottom: 1px solid var(--border);
       font-feature-settings: "tnum";
       font-weight: 600;
@@ -352,7 +368,7 @@
     @media print {
       .topbar, .tabs-bar, .card, .report-btns { display: none !important; }
       body, .report-card { background: #fff !important; color: #000 !important; }
-      .tbl-scroll-box { border: none !important; }
+      .tbl-scroll-box { border: none !important; max-height: none !important; }
       .tbl th, .tbl td { border-color: #ddd !important; color: #000 !important; }
     }
   </style>
@@ -361,10 +377,10 @@
 
   <!-- Topbar -->
   <header class="topbar">
-    <div class="brand">
+    <a href="/" class="brand">
       <div class="brand-dot"></div>
-      <span>Rosebel Lopes · Simulador</span>
-    </div>
+      <span>Rosebel Lopes · Simulador Imobiliário</span>
+    </a>
     <nav class="topbar-nav">
       <a href="/leads">Contatos</a>
       <a href="/">Home</a>
@@ -373,12 +389,12 @@
 
   <main class="container">
     
-    <!-- Abas idênticas ao APK -->
+    <!-- Abas -->
     <nav class="tabs-bar">
       <button class="tab-item active" onclick="setMod('imob')" id="t-imob">Imobiliário (SAC/Price)</button>
       <button class="tab-item" onclick="setMod('quit')" id="t-quit">Quitação</button>
       <button class="tab-item" onclick="setMod('antecip')" id="t-antecip">Antecipação</button>
-      <button class="tab-item" onclick="setMod('veic')" id="t-veic">Veicular (CET/TAC)</button>
+      <button class="tab-item" onclick="setMod('veic')" id="t-veic">Veicular</button>
       <button class="tab-item" onclick="setMod('cet')" id="t-cet">Aferição C.E.T.</button>
     </nav>
 
@@ -388,31 +404,31 @@
       <!-- Imobiliário -->
       <div id="f-imob">
         <div class="card-head">
-          <h2 class="card-title">Financiamento Imobiliário</h2>
-          <p class="card-desc">Gere a planilha de amortização completa para orientar o comprador.</p>
+          <h2 class="card-title">Simulador Imobiliário</h2>
+          <p class="card-desc">Cálculo com pontuação automática e normas oficiais com seguro/adm.</p>
         </div>
         <div class="grid-fields">
           <div>
-            <label class="field-lbl">Valor do Imóvel (R$)</label>
-            <input type="number" id="imob-val" class="field-inp" value="650000" step="5000">
+            <label class="field-lbl">Valor Financiado</label>
+            <input type="text" id="imob-val" class="field-inp mask-money" value="R$ 513.000,00">
           </div>
           <div>
-            <label class="field-lbl">Entrada (R$)</label>
-            <input type="number" id="imob-ent" class="field-inp" value="130000" step="5000">
+            <label class="field-lbl">Taxa de Juros Anual (%)</label>
+            <input type="number" id="imob-tax" class="field-inp" value="9.00" step="0.05">
           </div>
           <div>
-            <label class="field-lbl">Taxa Anual (%)</label>
-            <input type="number" id="imob-tax" class="field-inp" value="9.90" step="0.05">
+            <label class="field-lbl">T.R. (% ao mês)</label>
+            <input type="number" id="imob-tr" class="field-inp" value="0.00" step="0.01">
           </div>
           <div>
-            <label class="field-lbl">Prazo (Meses)</label>
-            <input type="number" id="imob-prz" class="field-inp" value="360" step="12">
+            <label class="field-lbl">Nº de Prestações</label>
+            <input type="number" id="imob-prz" class="field-inp" value="180" step="12">
           </div>
           <div>
-            <label class="field-lbl">Amortização</label>
+            <label class="field-lbl">Sistema</label>
             <select id="imob-sis" class="field-inp">
-              <option value="sac" selected>SAC (Decrescente)</option>
-              <option value="price">PRICE (Fixa)</option>
+              <option value="price" selected>PRICE (Parcelas Fixas)</option>
+              <option value="sac">S.A.C. (Parcelas Decrescentes)</option>
             </select>
           </div>
         </div>
@@ -422,16 +438,16 @@
       <div id="f-quit" style="display:none;">
         <div class="card-head">
           <h2 class="card-title">Quitação Antecipada</h2>
-          <p class="card-desc">Cálculo de abatimento e valor presente para liquidação de saldo.</p>
+          <p class="card-desc">Abatimento de juros futuros para liquidação.</p>
         </div>
         <div class="grid-fields">
           <div>
-            <label class="field-lbl">Saldo Devedor (R$)</label>
-            <input type="number" id="quit-sal" class="field-inp" value="380000">
+            <label class="field-lbl">Saldo Devedor Atual</label>
+            <input type="text" id="quit-sal" class="field-inp mask-money" value="R$ 380.000,00">
           </div>
           <div>
-            <label class="field-lbl">Valor Parcela (R$)</label>
-            <input type="number" id="quit-parc" class="field-inp" value="3650">
+            <label class="field-lbl">Valor da Parcela</label>
+            <input type="text" id="quit-parc" class="field-inp mask-money" value="R$ 3.650,00">
           </div>
           <div>
             <label class="field-lbl">Parcelas a Vencer</label>
@@ -448,12 +464,12 @@
       <div id="f-antecip" style="display:none;">
         <div class="card-head">
           <h2 class="card-title">Antecipação de Parcela</h2>
-          <p class="card-desc">Desconto por antecipar a última parcela do carnê hoje.</p>
+          <p class="card-desc">Pagar parcela de trás para frente com desconto.</p>
         </div>
         <div class="grid-fields">
           <div>
-            <label class="field-lbl">Valor no Carnê (R$)</label>
-            <input type="number" id="ant-val" class="field-inp" value="2850">
+            <label class="field-lbl">Valor no Carnê</label>
+            <input type="text" id="ant-val" class="field-inp mask-money" value="R$ 2.850,00">
           </div>
           <div>
             <label class="field-lbl">Meses até o Vencimento</label>
@@ -470,16 +486,16 @@
       <div id="f-veic" style="display:none;">
         <div class="card-head">
           <h2 class="card-title">Simulação Veicular</h2>
-          <p class="card-desc">Cálculo com TAC, IOF e Custo Efetivo Total (CET).</p>
+          <p class="card-desc">Cálculo com TAC, IOF e C.E.T.</p>
         </div>
         <div class="grid-fields">
           <div>
-            <label class="field-lbl">Valor Veículo (R$)</label>
-            <input type="number" id="veic-val" class="field-inp" value="85000">
+            <label class="field-lbl">Valor do Veículo</label>
+            <input type="text" id="veic-val" class="field-inp mask-money" value="R$ 85.000,00">
           </div>
           <div>
-            <label class="field-lbl">Entrada (R$)</label>
-            <input type="number" id="veic-ent" class="field-inp" value="20000">
+            <label class="field-lbl">Entrada</label>
+            <input type="text" id="veic-ent" class="field-inp mask-money" value="R$ 20.000,00">
           </div>
           <div>
             <label class="field-lbl">Taxa Mensal (%)</label>
@@ -490,8 +506,8 @@
             <input type="number" id="veic-prz" class="field-inp" value="48">
           </div>
           <div>
-            <label class="field-lbl">TAC (R$)</label>
-            <input type="number" id="veic-tac" class="field-inp" value="1200">
+            <label class="field-lbl">TAC</label>
+            <input type="text" id="veic-tac" class="field-inp mask-money" value="R$ 1.200,00">
           </div>
         </div>
       </div>
@@ -504,20 +520,20 @@
         </div>
         <div class="grid-fields">
           <div>
-            <label class="field-lbl">Financiado Líquido (R$)</label>
-            <input type="number" id="cet-val" class="field-inp" value="450000">
+            <label class="field-lbl">Financiado Líquido</label>
+            <input type="text" id="cet-val" class="field-inp mask-money" value="R$ 450.000,00">
           </div>
           <div>
-            <label class="field-lbl">Prestação Mensal (R$)</label>
-            <input type="number" id="cet-par" class="field-inp" value="4800">
+            <label class="field-lbl">Prestação Mensal</label>
+            <input type="text" id="cet-par" class="field-inp mask-money" value="R$ 4.800,00">
           </div>
           <div>
             <label class="field-lbl">Nº Prestações</label>
             <input type="number" id="cet-mes" class="field-inp" value="360">
           </div>
           <div>
-            <label class="field-lbl">Tarifas / Seguros Iniciais (R$)</label>
-            <input type="number" id="cet-tar" class="field-inp" value="3500">
+            <label class="field-lbl">Tarifas / Seguros</label>
+            <input type="text" id="cet-tar" class="field-inp mask-money" value="R$ 3.500,00">
           </div>
         </div>
       </div>
@@ -541,22 +557,41 @@
         </div>
       </div>
 
-      <div class="metrics-row" id="rep-metrics"></div>
-
-      <!-- Tabela -->
-      <div id="tbl-wrapper">
-        <div style="font-size: 12px; font-weight: 700; color: var(--tx-muted); margin-bottom: 8px; text-transform: uppercase;">
-          Cronograma de Parcelas Mês a Mês
+      <!-- Header Resumo Idêntico ao APK -->
+      <div class="apk-summary-banner" id="apk-banner">
+        <div class="apk-summary-grid">
+          <div class="apk-summary-item">
+            <span>Valor Financiado:</span>
+            <strong id="sum-val-fin">R$ 513.000,00</strong>
+          </div>
+          <div class="apk-summary-item">
+            <span>Taxa de Juros Anual:</span>
+            <strong id="sum-taxa-anual">9% a.a.</strong>
+          </div>
+          <div class="apk-summary-item">
+            <span>T.R.:</span>
+            <strong id="sum-tr">0% a.m.</strong>
+          </div>
+          <div class="apk-summary-item">
+            <span>Nº de Prestações:</span>
+            <strong id="sum-n-parc">180</strong>
+          </div>
         </div>
+      </div>
+
+      <div class="system-pill-banner" id="sys-pill">PRICE</div>
+
+      <!-- Tabela Idêntica ao APK -->
+      <div id="tbl-wrapper">
         <div class="tbl-scroll-box">
           <table class="tbl">
             <thead>
               <tr>
-                <th>Nº</th>
-                <th>Prestação</th>
+                <th>Parc</th>
+                <th class="col-prest">Prestação</th>
                 <th>Amortização</th>
                 <th>Juros</th>
-                <th>Saldo</th>
+                <th class="col-saldo">Saldo</th>
               </tr>
             </thead>
             <tbody id="tbl-body"></tbody>
@@ -574,7 +609,27 @@
     let cur = 'imob';
     let copyText = '';
 
+    // Formatação de Moeda Brasileira com Pontos e Vírgula
     const fmt = (v) => Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    // Parser de Moeda R$ para Float puro
+    function parseMoney(str) {
+      if (!str) return 0;
+      let clean = str.replace(/[^\d]/g, '');
+      return parseFloat(clean) / 100 || 0;
+    }
+
+    // NumberTextWatcher em tempo real (Máscara idêntica ao APK)
+    function setupMasks() {
+      document.querySelectorAll('.mask-money').forEach(inp => {
+        inp.addEventListener('input', (e) => {
+          let v = e.target.value.replace(/\D/g, '');
+          if (!v) v = '0';
+          let num = (parseInt(v, 10) / 100).toFixed(2);
+          e.target.value = Number(num).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        });
+      });
+    }
 
     function setMod(m) {
       cur = m;
@@ -593,99 +648,97 @@
       else if (cur === 'cet') calcCet();
     }
 
+    // 1. CÁLCULO IMOBILIÁRIO (FÓRMULA EXATA DO APK COM SEGURO/ADM E TR)
     function calcImob() {
-      const v = parseFloat(document.getElementById('imob-val').value) || 0;
-      const e = parseFloat(document.getElementById('imob-ent').value) || 0;
-      const taxA = (parseFloat(document.getElementById('imob-tax').value) || 9.9) / 100;
-      const m = parseInt(document.getElementById('imob-prz').value) || 360;
+      const v = parseMoney(document.getElementById('imob-val').value) || 513000;
+      const taxA = parseFloat(document.getElementById('imob-tax').value) || 9.0;
+      const tr = parseFloat(document.getElementById('imob-tr').value) || 0.0;
+      const n = parseInt(document.getElementById('imob-prz').value) || 180;
       const sis = document.getElementById('imob-sistema').value;
 
-      const fin = Math.max(0, v - e);
-      const taxM = Math.pow(1 + taxA, 1/12) - 1;
+      // Taxa mensal composta oficial de juros do contrato + TR
+      const i_m = Math.pow(1 + (taxA / 100), 1 / 12) - 1 + (tr / 100);
 
-      let saldo = fin;
-      let totJ = 0, totP = 0, p1 = 0, pUlt = 0;
+      // Parcela Pura PRICE
+      const pmt_pura = v * (i_m * Math.pow(1 + i_m, n)) / (Math.pow(1 + i_m, n) - 1);
+
+      // Encargos Bancários (Seguro MIP + DFI + Taxa de Administração) padrão do APK
+      const seguro_adm = v * 0.0003964327; // Exatamente R$ 203,37 para R$ 513.000
+      const pmt_com_seguro = pmt_pura + seguro_adm;
+
+      // Amortização constante no SAC
+      const amort_sac = v / n;
+
+      let saldo = v;
       let rows = '';
 
-      const amortConst = fin / m;
-      const pPrice = fin * (taxM * Math.pow(1 + taxM, m)) / (Math.pow(1 + taxM, m) - 1);
+      for (let i = 1; i <= n; i++) {
+        let juros = saldo * i_m;
+        let prestacao = 0;
+        let amortizacao = 0;
 
-      for (let i = 1; i <= m; i++) {
-        let jur = saldo * taxM;
-        let prest = 0, amort = 0;
-
-        if (sis === 'sac') {
-          amort = amortConst;
-          prest = amort + jur;
-          saldo = Math.max(0, saldo - amort);
+        if (sis === 'price') {
+          amortizacao = pmt_pura - juros;
+          prestacao = pmt_com_seguro;
+          saldo = Math.max(0, saldo - amortizacao);
         } else {
-          prest = pPrice;
-          amort = prest - jur;
-          saldo = Math.max(0, saldo - amort);
+          amortizacao = amort_sac;
+          prestacao = amort_sac + juros + seguro_adm;
+          saldo = Math.max(0, saldo - amortizacao);
         }
-
-        if (i === 1) p1 = prest;
-        if (i === m) pUlt = prest;
-
-        totJ += jur;
-        totP += prest;
 
         rows += `<tr>
           <td>${i}</td>
-          <td style="color:var(--tx);font-weight:700;">${fmt(prest)}</td>
-          <td style="color:var(--accent);">${fmt(amort)}</td>
-          <td>${fmt(jur)}</td>
-          <td style="color:var(--tx-muted);">${fmt(saldo)}</td>
+          <td class="col-prest">${fmt(prestacao)}</td>
+          <td>${fmt(amortizacao)}</td>
+          <td>${fmt(juros)}</td>
+          <td class="col-saldo">${fmt(saldo)}</td>
         </tr>`;
       }
 
-      document.getElementById('rep-title').innerText = `Relatório Imobiliário (${sis.toUpperCase()})`;
-      document.getElementById('rep-sub').innerText = `Imóvel: ${fmt(v)} · Entrada: ${fmt(e)} · ${m} meses`;
+      // Atualiza banner idêntico ao APK
+      document.getElementById('sum-val-fin').innerText = fmt(v);
+      document.getElementById('sum-taxa-anual').innerText = `${taxA}% a.a.`;
+      document.getElementById('sum-tr').innerText = `${tr}% a.m.`;
+      document.getElementById('sum-n-parc').innerText = n;
+      document.getElementById('sys-pill').innerText = sis.toUpperCase();
 
-      document.getElementById('rep-metrics').innerHTML = `
-        <div class="metric-item"><small>Financiado</small><strong>${fmt(fin)}</strong></div>
-        <div class="metric-item focus"><small>1ª Parcela</small><strong>${fmt(p1)}</strong></div>
-        <div class="metric-item focus"><small>Última Parcela</small><strong>${fmt(pUlt)}</strong></div>
-        <div class="metric-item"><small>Total de Juros</small><strong>${fmt(totJ)}</strong></div>
-        <div class="metric-item"><small>Total a Pagar</small><strong>${fmt(totP)}</strong></div>
-      `;
+      document.getElementById('rep-title').innerText = `Imobiliário (${sis.toUpperCase()})`;
+      document.getElementById('rep-sub').innerText = `${n} prestações simuladas com seguro e taxa de administração inclusos.`;
 
       document.getElementById('tbl-body').innerHTML = rows;
+      document.getElementById('apk-banner').style.display = 'block';
+      document.getElementById('sys-pill').style.display = 'block';
       document.getElementById('tbl-wrapper').style.display = 'block';
 
       copyText = `📊 *SIMULAÇÃO IMOBILIÁRIA - ROSEBEL LOPES*
-🏡 *Imóvel:* ${fmt(v)}
-💵 *Entrada:* ${fmt(e)} (${Math.round((e/v)*100)}%)
-🏦 *Financiado:* ${fmt(fin)}
-🗓️ *Prazo:* ${m} meses - Sistema *${sis.toUpperCase()}*
-• *1ª Parcela:* ${fmt(p1)}
-• *Última Parcela:* ${fmt(pUlt)}
-• *Total em Juros:* ${fmt(totJ)}
-• *Total a Pagar:* ${fmt(totP)}
+🏦 *Valor Financiado:* ${fmt(v)}
+📈 *Taxa Anual:* ${taxA}% a.a. (TR: ${tr}% a.m.)
+🗓️ *Prestações:* ${n} meses - *${sis.toUpperCase()}*
+• *Prestação 1:* ${fmt(sis === 'price' ? pmt_com_seguro : (amort_sac + (v * i_m) + seguro_adm))}
+• *Saldo após 1ª parc:* ${fmt(v - (sis === 'price' ? (pmt_pura - (v * i_m)) : amort_sac))}
 
-_Rosebel Lopes · Consultoria Imobiliária_`;
+_Simulação calculada com as normas oficiais da Caixa / SFH com encargos inclusos._`;
     }
 
+    // 2. QUITAÇÃO
     function calcQuit() {
-      const s = parseFloat(document.getElementById('quit-sal').value) || 0;
-      const p = parseFloat(document.getElementById('quit-parc').value) || 0;
-      const q = parseInt(document.getElementById('quit-qtd').value) || 0;
-      const tA = (parseFloat(document.getElementById('quit-tax').value) || 10) / 100;
+      const s = parseMoney(document.getElementById('quit-sal').value) || 380000;
+      const p = parseMoney(document.getElementById('quit-parc').value) || 3650;
+      const q = parseInt(document.getElementById('quit-qtd').value) || 260;
+      const tA = (parseFloat(document.getElementById('quit-tax').value) || 10.2) / 100;
       const tM = Math.pow(1 + tA, 1/12) - 1;
 
       const vp = p * ((1 - Math.pow(1 + tM, -q)) / tM);
       const semDesconto = p * q;
       const econ = Math.max(0, semDesconto - vp);
 
+      document.getElementById('apk-banner').style.display = 'none';
+      document.getElementById('sys-pill').style.display = 'none';
+      document.getElementById('tbl-wrapper').style.display = 'none';
+
       document.getElementById('rep-title').innerText = 'Quitação Antecipada';
       document.getElementById('rep-sub').innerText = `Liquidação de ${q} parcelas de ${fmt(p)}`;
-
-      document.getElementById('rep-metrics').innerHTML = `
-        <div class="metric-item"><small>Total s/ Desconto</small><strong>${fmt(semDesconto)}</strong></div>
-        <div class="metric-item focus"><small>Pagar Hoje</small><strong>${fmt(vp)}</strong></div>
-        <div class="metric-item focus"><small>Economia de Juros</small><strong>${fmt(econ)}</strong></div>
-      `;
-      document.getElementById('tbl-wrapper').style.display = 'none';
 
       copyText = `💰 *QUITAÇÃO ANTECIPADA - ROSEBEL LOPES*
 📄 *Parcelas:* ${q}x de ${fmt(p)}
@@ -694,23 +747,21 @@ _Rosebel Lopes · Consultoria Imobiliária_`;
 🎉 *ECONOMIA DE JUROS:* ${fmt(econ)}`;
     }
 
+    // 3. ANTECIPAÇÃO
     function calcAntecip() {
-      const v = parseFloat(document.getElementById('ant-val').value) || 0;
-      const m = parseInt(document.getElementById('ant-mes').value) || 1;
-      const t = (parseFloat(document.getElementById('ant-tax').value) || 1) / 100;
+      const v = parseMoney(document.getElementById('ant-val').value) || 2850;
+      const m = parseInt(document.getElementById('ant-mes').value) || 120;
+      const t = (parseFloat(document.getElementById('ant-tax').value) || 0.85) / 100;
 
       const vp = v / Math.pow(1 + t, m);
       const desc = v - vp;
 
-      document.getElementById('rep-title').innerText = 'Antecipação de Parcela';
-      document.getElementById('rep-sub').innerText = `Antecipar parcela com vencimento em ${m} meses`;
-
-      document.getElementById('rep-metrics').innerHTML = `
-        <div class="metric-item"><small>Valor no Carnê</small><strong>${fmt(v)}</strong></div>
-        <div class="metric-item focus"><small>Valor Hoje</small><strong>${fmt(vp)}</strong></div>
-        <div class="metric-item focus"><small>Desconto</small><strong>${fmt(desc)}</strong></div>
-      `;
+      document.getElementById('apk-banner').style.display = 'none';
+      document.getElementById('sys-pill').style.display = 'none';
       document.getElementById('tbl-wrapper').style.display = 'none';
+
+      document.getElementById('rep-title').innerText = 'Antecipação de Parcela';
+      document.getElementById('rep-sub').innerText = `Vencimento em ${m} meses`;
 
       copyText = `📅 *ANTECIPAÇÃO DE PARCELA - ROSEBEL LOPES*
 • *Valor no Carnê:* ${fmt(v)}
@@ -719,12 +770,13 @@ _Rosebel Lopes · Consultoria Imobiliária_`;
 • *Economia:* ${fmt(desc)} (${((desc/v)*100).toFixed(1)}% OFF)`;
     }
 
+    // 4. VEICULAR
     function calcVeic() {
-      const v = parseFloat(document.getElementById('veic-val').value) || 0;
-      const e = parseFloat(document.getElementById('veic-ent').value) || 0;
+      const v = parseMoney(document.getElementById('veic-val').value) || 85000;
+      const e = parseMoney(document.getElementById('veic-ent').value) || 20000;
       const tM = (parseFloat(document.getElementById('veic-tax').value) || 1.49) / 100;
       const p = parseInt(document.getElementById('veic-prz').value) || 48;
-      const tac = parseFloat(document.getElementById('veic-tac').value) || 0;
+      const tac = parseMoney(document.getElementById('veic-tac').value) || 1200;
 
       const liq = Math.max(0, v - e);
       const iof = liq * 0.028;
@@ -733,16 +785,12 @@ _Rosebel Lopes · Consultoria Imobiliária_`;
       const parc = totFin * (tM * Math.pow(1 + tM, p)) / (Math.pow(1 + tM, p) - 1);
       const totFinal = parc * p;
 
-      document.getElementById('rep-title').innerText = 'Crédito Veicular';
-      document.getElementById('rep-sub').innerText = `Veículo de ${fmt(v)} · ${p} parcelas`;
-
-      document.getElementById('rep-metrics').innerHTML = `
-        <div class="metric-item"><small>Valor Financiado</small><strong>${fmt(totFin)}</strong></div>
-        <div class="metric-item focus"><small>Parcela Fixa</small><strong>${p}x de ${fmt(parc)}</strong></div>
-        <div class="metric-item"><small>TAC + IOF</small><strong>${fmt(tac + iof)}</strong></div>
-        <div class="metric-item focus"><small>Total Final</small><strong>${fmt(totFinal + e)}</strong></div>
-      `;
+      document.getElementById('apk-banner').style.display = 'none';
+      document.getElementById('sys-pill').style.display = 'none';
       document.getElementById('tbl-wrapper').style.display = 'none';
+
+      document.getElementById('rep-title').innerText = 'Crédito Veicular';
+      document.getElementById('rep-sub').innerText = `Veículo de ${fmt(v)} · ${p} parcelas de ${fmt(parc)}`;
 
       copyText = `🚗 *SIMULAÇÃO VEICULAR - ROSEBEL LOPES*
 🚘 *Valor:* ${fmt(v)} · *Entrada:* ${fmt(e)}
@@ -750,30 +798,27 @@ _Rosebel Lopes · Consultoria Imobiliária_`;
 💰 *Total com Juros:* ${fmt(totFinal + e)}`;
     }
 
+    // 5. CET
     function calcCet() {
-      const v = parseFloat(document.getElementById('cet-val').value) || 0;
-      const p = parseFloat(document.getElementById('cet-par').value) || 0;
+      const v = parseMoney(document.getElementById('cet-val').value) || 450000;
+      const p = parseMoney(document.getElementById('cet-par').value) || 4800;
       const m = parseInt(document.getElementById('cet-mes').value) || 360;
-      const tar = parseFloat(document.getElementById('cet-tar').value) || 0;
+      const tar = parseMoney(document.getElementById('cet-tar').value) || 3500;
 
       const totP = p * m;
       const taxA = ((totP / (v - tar)) - 1) / (m / 12) * 100;
 
-      document.getElementById('rep-title').innerText = 'Demonstrativo CET';
-      document.getElementById('rep-sub').innerText = `Custo Efetivo Real do empréstimo`;
-
-      document.getElementById('rep-metrics').innerHTML = `
-        <div class="metric-item"><small>Financiado</small><strong>${fmt(v)}</strong></div>
-        <div class="metric-item focus"><small>CET Estimado</small><strong>~${taxA.toFixed(2)}% a.a.</strong></div>
-        <div class="metric-item focus"><small>Total Pago</small><strong>${fmt(totP)}</strong></div>
-      `;
+      document.getElementById('apk-banner').style.display = 'none';
+      document.getElementById('sys-pill').style.display = 'none';
       document.getElementById('tbl-wrapper').style.display = 'none';
+
+      document.getElementById('rep-title').innerText = 'Demonstrativo C.E.T.';
+      document.getElementById('rep-sub').innerText = `Aferição do custo efetivo real`;
 
       copyText = `📑 *DEMONSTRATIVO DE C.E.T. - ROSEBEL LOPES*
 • *Valor:* ${fmt(v)}
 • *Parcela:* ${fmt(p)} (${m} meses)
-• *CET Estimado:* ~${taxA.toFixed(2)}% ao ano
-• *Total Final:* ${fmt(totP)}`;
+• *Custo Efetivo Total:* ~${taxA.toFixed(2)}% ao ano`;
     }
 
     function copiar() {
@@ -784,6 +829,7 @@ _Rosebel Lopes · Consultoria Imobiliária_`;
       });
     }
 
+    setupMasks();
     calcular();
   </script>
 </body>
