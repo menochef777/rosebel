@@ -2,404 +2,358 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Painel da Corretora · Simulador & Relatórios Completos | Rosebel Lopes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+  <title>Simulador Financeiro · Rosebel Lopes</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
   <style>
+    /* Duas cores principais: Base Dark Confortável (#090e17) + Accent Cyan/Blue (#38bdf8) */
     :root {
-      --navy-950: #040d1a;
-      --navy-900: #0a192f;
-      --navy-800: #0f274a;
-      --navy-700: #173868;
-      --blue-600: #2563eb;
-      --blue-500: #3b82f6;
-      --gold-500: #d9a441;
-      --gold-400: #f59e0b;
-      --green-600: #16a34a;
-      --tx-main: #0f172a;
-      --tx-muted: #64748b;
-      --bg-body: #f1f5f9;
-      --card-bg: #ffffff;
-      --card-border: #e2e8f0;
+      --bg: #080c14;
+      --surface: #0e1624;
+      --surface-card: #131e31;
+      --border: #1c2b44;
+      --border-focus: #38bdf8;
+      --tx: #f1f5f9;
+      --tx-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-deep: #0284c7;
+      --accent-bg: rgba(56, 189, 248, 0.08);
       --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    body {
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--tx);
       font-family: var(--font-sans);
-      background: var(--bg-body);
-      color: var(--tx-main);
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Topbar Corretora */
+    /* Topbar */
     .topbar {
-      background: var(--navy-950);
-      color: #ffffff;
-      padding: 12px 24px;
+      width: 100%;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
       gap: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .topbar-brand {
+    .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 16px;
+      gap: 8px;
+      font-size: 15px;
       font-weight: 800;
+      color: var(--tx);
     }
-    .topbar-badge {
-      background: var(--gold-500);
-      color: var(--navy-950);
-      font-size: 11px;
-      font-weight: 800;
-      padding: 2px 8px;
-      border-radius: 6px;
-      text-transform: uppercase;
+    .brand-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent);
     }
-    .topbar-links {
+    .topbar-nav {
       display: flex;
-      align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
-    .topbar-links a {
-      color: #94a3b8;
+    .topbar-nav a {
+      color: var(--tx-muted);
       text-decoration: none;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
-      transition: color 0.15s ease;
     }
-    .topbar-links a:hover { color: #ffffff; }
+    .topbar-nav a:hover { color: var(--accent); }
 
-    /* Layout Principal */
-    .wrapper {
-      max-width: 1240px;
-      margin: 24px auto 60px;
-      padding: 0 16px;
+    /* Container Principal */
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 14px 60px;
     }
 
-    /* Menu de Módulos (Idêntico ao APK base.apk) */
-    .module-tabs {
+    /* Abas de Navegação (Mobile Ergonomics) */
+    .tabs-bar {
       display: flex;
       gap: 6px;
-      background: #ffffff;
-      border: 1px solid var(--card-border);
-      padding: 6px;
-      border-radius: 16px;
-      margin-bottom: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 4px;
+      border-radius: 14px;
+      margin-bottom: 18px;
       overflow-x: auto;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
-    .mod-btn {
+    .tabs-bar::-webkit-scrollbar { display: none; }
+
+    .tab-item {
       flex: 1;
-      min-width: 170px;
-      padding: 12px 16px;
-      border: none;
-      border-radius: 12px;
+      min-width: 130px;
+      padding: 10px 14px;
       background: transparent;
+      border: none;
+      border-radius: 10px;
+      color: var(--tx-muted);
       font-family: inherit;
-      font-size: 13.5px;
-      font-weight: 700;
-      color: var(--tx-muted);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-    .mod-btn:hover {
-      background: #f8fafc;
-      color: var(--navy-950);
-    }
-    .mod-btn.active {
-      background: var(--navy-900);
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(10, 25, 47, 0.2);
-    }
-
-    /* Painel do Formulário de Entrada */
-    .calc-card {
-      background: #ffffff;
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 28px;
-      margin-bottom: 28px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-    }
-    .calc-card-title {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--navy-950);
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .calc-card-desc {
-      font-size: 13.5px;
-      color: var(--tx-muted);
-      margin-bottom: 22px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-    .field-label {
-      display: block;
       font-size: 12.5px;
       font-weight: 700;
-      color: var(--navy-900);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
+      cursor: pointer;
+      white-space: nowrap;
+      text-align: center;
+      transition: all 0.15s ease;
     }
-    .field-input {
+    .tab-item.active {
+      background: var(--accent-deep);
+      color: #ffffff;
+    }
+
+    /* Card do Formulário */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px 18px;
+      margin-bottom: 20px;
       width: 100%;
-      font-family: inherit;
-      font-size: 15px;
+    }
+    .card-head {
+      margin-bottom: 18px;
+    }
+    .card-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--tx);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-desc {
+      font-size: 12.5px;
+      color: var(--tx-muted);
+      margin-top: 3px;
+    }
+
+    .grid-fields {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 480px) {
+      .grid-fields { grid-template-columns: 1fr; gap: 12px; }
+      .card { padding: 16px 14px; }
+    }
+
+    .field-lbl {
+      display: block;
+      font-size: 11.5px;
       font-weight: 700;
-      color: var(--navy-950);
-      background: #f8fafc;
-      border: 1.5px solid #cbd5e1;
+      color: var(--tx-muted);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .field-inp {
+      width: 100%;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 10px 14px;
+      padding: 11px 14px;
+      color: var(--tx);
+      font-family: inherit;
+      font-size: 14.5px;
+      font-weight: 700;
       outline: none;
       transition: border 0.2s ease;
     }
-    .field-input:focus {
-      background: #ffffff;
-      border-color: var(--blue-600);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    .field-inp:focus {
+      border-color: var(--border-focus);
     }
 
-    /* Botões Principais */
-    .actions-bar {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .btn-submit {
-      background: var(--navy-900);
-      color: #ffffff;
-      border: none;
-      border-radius: 10px;
-      padding: 13px 26px;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 14px rgba(10, 25, 47, 0.25);
-      transition: all 0.15s ease;
-    }
-    .btn-submit:hover {
-      background: #061122;
-      transform: translateY(-1px);
-    }
-    .btn-reset {
-      background: #f1f5f9;
-      color: var(--tx-muted);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 13px 20px;
-      font-family: inherit;
-      font-size: 13.5px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .btn-reset:hover {
-      background: #e2e8f0;
-      color: var(--navy-950);
-    }
-
-    /* RELATÓRIO COMPLETO (Resultado Exato do APK) */
-    .report-wrapper {
-      background: #ffffff;
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 32px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
-      margin-bottom: 40px;
-    }
-    .report-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      border-bottom: 2px solid #f1f5f9;
-      padding-bottom: 20px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .report-title {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--navy-950);
-    }
-    .report-subtitle {
-      font-size: 13.5px;
-      color: var(--tx-muted);
-      margin-top: 2px;
-    }
-
-    .report-buttons {
+    /* Ações */
+    .btn-row {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
-    .btn-copy {
-      background: #1fa855;
+    .btn-action {
+      background: var(--accent-deep);
       color: #ffffff;
       border: none;
       border-radius: 10px;
-      padding: 10px 18px;
+      padding: 12px 22px;
       font-family: inherit;
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 13.5px;
+      font-weight: 800;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      box-shadow: 0 4px 12px rgba(31, 168, 85, 0.3);
+      transition: background 0.15s ease;
     }
-    .btn-copy:hover { background: #188644; }
-    .btn-print {
-      background: #f8fafc;
-      color: var(--navy-900);
-      border: 1.5px solid var(--card-border);
-      border-radius: 10px;
-      padding: 10px 18px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-print:hover { background: #e2e8f0; }
+    .btn-action:hover { background: #0369a1; }
 
-    /* Resumo das Métricas */
-    .metrics-summary-grid {
+    /* Relatório */
+    .report-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px 18px;
+      width: 100%;
+    }
+    .report-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+    .report-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .report-btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-wpp-copy {
+      background: #15803d;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-wpp-copy:hover { background: #166534; }
+    .btn-print-outline {
+      background: var(--surface-card);
+      color: var(--tx);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Grid de Métricas */
+    .metrics-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 16px;
-      margin-bottom: 28px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-bottom: 22px;
     }
-    .metric-card {
-      background: #f8fafc;
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 16px 18px;
+    .metric-item {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 15px;
     }
-    .metric-card small {
+    .metric-item small {
       display: block;
       color: var(--tx-muted);
-      font-size: 11.5px;
+      font-size: 10.5px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 4px;
+      letter-spacing: 0.03em;
+      margin-bottom: 3px;
     }
-    .metric-card strong {
-      font-size: 20px;
+    .metric-item strong {
+      font-size: 17px;
       font-weight: 800;
-      color: var(--navy-950);
+      color: var(--tx);
       font-feature-settings: "tnum";
     }
-    .metric-card.highlight {
-      background: rgba(217, 164, 65, 0.08);
-      border-color: rgba(217, 164, 65, 0.3);
-    }
-    .metric-card.highlight strong {
-      color: #b45309;
+    .metric-item.focus strong {
+      color: var(--accent);
     }
 
-    /* Tabela Mês a Mês do Financiamento */
-    .table-container {
-      max-height: 480px;
-      overflow-y: auto;
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      background: #ffffff;
-    }
-    .amort-table {
+    /* Tabela sem vazamento lateral */
+    .tbl-scroll-box {
       width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-card);
+    }
+    .tbl {
+      width: 100%;
+      min-width: 440px;
       border-collapse: collapse;
-      font-size: 13px;
+      font-size: 12.5px;
       text-align: right;
     }
-    .amort-table th {
+    .tbl th {
       position: sticky;
       top: 0;
-      background: var(--navy-950);
-      color: #ffffff;
-      padding: 12px 14px;
+      background: var(--surface);
+      color: var(--tx-muted);
+      padding: 10px 12px;
       font-weight: 700;
-      font-size: 11.5px;
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      z-index: 5;
+      border-bottom: 1px solid var(--border);
     }
-    .amort-table th:first-child, .amort-table td:first-child {
-      text-align: center;
-    }
-    .amort-table td {
-      padding: 10px 14px;
-      border-bottom: 1px solid #f1f5f9;
-      color: var(--tx-main);
-      font-weight: 600;
+    .tbl th:first-child, .tbl td:first-child { text-align: center; width: 44px; }
+    .tbl td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
       font-feature-settings: "tnum";
+      font-weight: 600;
     }
-    .amort-table tr:nth-child(even) {
-      background: #f8fafc;
-    }
-    .amort-table tr:hover {
-      background: #f1f5f9;
-    }
+    .tbl tr:hover { background: rgba(56, 189, 248, 0.04); }
 
-    /* Feedback de Cópia */
-    .toast-msg {
+    /* Toast */
+    .toast {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: var(--navy-950);
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent-deep);
       color: #ffffff;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 13.5px;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 12.5px;
       font-weight: 700;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
       display: none;
-      z-index: 1000;
+      z-index: 999;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
     }
 
-    /* Estilo de Impressão */
     @media print {
-      .topbar, .module-tabs, .actions-bar, .report-buttons { display: none !important; }
-      body { background: #ffffff !important; }
-      .wrapper { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
-      .calc-card { display: none !important; }
-      .report-wrapper { border: none !important; box-shadow: none !important; padding: 0 !important; }
-      .table-container { max-height: none !important; overflow: visible !important; }
+      .topbar, .tabs-bar, .card, .report-btns { display: none !important; }
+      body, .report-card { background: #fff !important; color: #000 !important; }
+      .tbl-scroll-box { border: none !important; }
+      .tbl th, .tbl td { border-color: #ddd !important; color: #000 !important; }
     }
   </style>
 </head>
@@ -407,227 +361,205 @@
 
   <!-- Topbar -->
   <header class="topbar">
-    <div class="topbar-brand">
-      <span>Rosebel Lopes</span>
-      <span class="topbar-badge">Simulador & Relatórios</span>
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <span>Rosebel Lopes · Simulador</span>
     </div>
-    <div class="topbar-links">
-      <a href="/leads">👥 Acessar Leads</a>
-      <a href="/">🌐 Ir para a Home</a>
-    </div>
+    <nav class="topbar-nav">
+      <a href="/leads">Contatos</a>
+      <a href="/">Home</a>
+    </nav>
   </header>
 
-  <main class="wrapper">
-
-    <!-- Abas idênticas às telas do APK (base.apk) -->
-    <nav class="module-tabs">
-      <button class="mod-btn active" onclick="setMod('imob')" id="tab-imob">
-        🏠 Financiamento Imobiliário (SAC / PRICE)
-      </button>
-      <button class="mod-btn" onclick="setMod('quit')" id="tab-quit">
-        💰 Quitação de Financiamento
-      </button>
-      <button class="mod-btn" onclick="setMod('antecip')" id="tab-antecip">
-        📅 Antecipação de Parcela
-      </button>
-      <button class="mod-btn" onclick="setMod('veic')" id="tab-veic">
-        🚗 Veicular (com TAC & IOF)
-      </button>
-      <button class="mod-btn" onclick="setMod('cet')" id="tab-cet">
-        📑 Custo Efetivo Total (CET)
-      </button>
+  <main class="container">
+    
+    <!-- Abas idênticas ao APK -->
+    <nav class="tabs-bar">
+      <button class="tab-item active" onclick="setMod('imob')" id="t-imob">Imobiliário (SAC/Price)</button>
+      <button class="tab-item" onclick="setMod('quit')" id="t-quit">Quitação</button>
+      <button class="tab-item" onclick="setMod('antecip')" id="t-antecip">Antecipação</button>
+      <button class="tab-item" onclick="setMod('veic')" id="t-veic">Veicular (CET/TAC)</button>
+      <button class="tab-item" onclick="setMod('cet')" id="t-cet">Aferição C.E.T.</button>
     </nav>
 
-    <!-- Formulário Dinâmico -->
-    <section class="calc-card">
+    <!-- Formulários -->
+    <section class="card">
       
-      <!-- 1. MÓDULO IMOBILIÁRIO -->
-      <div id="form-imob" class="form-container">
-        <div class="calc-card-title">Cálculo de Financiamento Imobiliário (SAC / PRICE)</div>
-        <div class="calc-card-desc">Gere a planilha de amortização completa mês a mês e o resumo para enviar ao cliente.</div>
-
-        <div class="form-grid">
+      <!-- Imobiliário -->
+      <div id="f-imob">
+        <div class="card-head">
+          <h2 class="card-title">Financiamento Imobiliário</h2>
+          <p class="card-desc">Gere a planilha de amortização completa para orientar o comprador.</p>
+        </div>
+        <div class="grid-fields">
           <div>
-            <label class="field-label">Valor do Imóvel (R$)</label>
-            <input type="number" id="imob-valor" class="field-input" value="650000" step="5000">
+            <label class="field-lbl">Valor do Imóvel (R$)</label>
+            <input type="number" id="imob-val" class="field-inp" value="650000" step="5000">
           </div>
           <div>
-            <label class="field-label">Entrada (R$)</label>
-            <input type="number" id="imob-entrada" class="field-input" value="130000" step="5000">
+            <label class="field-lbl">Entrada (R$)</label>
+            <input type="number" id="imob-ent" class="field-inp" value="130000" step="5000">
           </div>
           <div>
-            <label class="field-label">Taxa de Juros Anual (%)</label>
-            <input type="number" id="imob-taxa" class="field-input" value="9.90" step="0.05">
+            <label class="field-lbl">Taxa Anual (%)</label>
+            <input type="number" id="imob-tax" class="field-inp" value="9.90" step="0.05">
           </div>
           <div>
-            <label class="field-label">Prazo (Meses)</label>
-            <input type="number" id="imob-prazo" class="field-input" value="360" step="12">
+            <label class="field-lbl">Prazo (Meses)</label>
+            <input type="number" id="imob-prz" class="field-inp" value="360" step="12">
           </div>
           <div>
-            <label class="field-label">Sistema de Amortização</label>
-            <select id="imob-sistema" class="field-input">
-              <option value="sac" selected>S.A.C. (Parcelas Decrescentes)</option>
-              <option value="price">PRICE (Parcelas Fixas)</option>
+            <label class="field-lbl">Amortização</label>
+            <select id="imob-sis" class="field-inp">
+              <option value="sac" selected>SAC (Decrescente)</option>
+              <option value="price">PRICE (Fixa)</option>
             </select>
           </div>
         </div>
       </div>
 
-      <!-- 2. MÓDULO QUITAÇÃO -->
-      <div id="form-quit" class="form-container" style="display: none;">
-        <div class="calc-card-title">Quitação de Financiamento (Amortização Extraordinária)</div>
-        <div class="calc-card-desc">Calcule o valor para liquidar parcelas antecipadas com abatimento proporcional de juros.</div>
-
-        <div class="form-grid">
+      <!-- Quitação -->
+      <div id="f-quit" style="display:none;">
+        <div class="card-head">
+          <h2 class="card-title">Quitação Antecipada</h2>
+          <p class="card-desc">Cálculo de abatimento e valor presente para liquidação de saldo.</p>
+        </div>
+        <div class="grid-fields">
           <div>
-            <label class="field-label">Saldo Devedor Atual (R$)</label>
-            <input type="number" id="quit-saldo" class="field-input" value="380000" step="5000">
+            <label class="field-lbl">Saldo Devedor (R$)</label>
+            <input type="number" id="quit-sal" class="field-inp" value="380000">
           </div>
           <div>
-            <label class="field-label">Valor da Parcela Atual (R$)</label>
-            <input type="number" id="quit-vlr-parc" class="field-input" value="3650" step="100">
+            <label class="field-lbl">Valor Parcela (R$)</label>
+            <input type="number" id="quit-parc" class="field-inp" value="3650">
           </div>
           <div>
-            <label class="field-label">Parcelas a Vencer</label>
-            <input type="number" id="quit-qtd-parc" class="field-input" value="260">
+            <label class="field-lbl">Parcelas a Vencer</label>
+            <input type="number" id="quit-qtd" class="field-inp" value="260">
           </div>
           <div>
-            <label class="field-label">Taxa de Juros Anual do Contrato (%)</label>
-            <input type="number" id="quit-taxa" class="field-input" value="10.20" step="0.1">
+            <label class="field-lbl">Taxa Anual (%)</label>
+            <input type="number" id="quit-tax" class="field-inp" value="10.20" step="0.1">
           </div>
         </div>
       </div>
 
-      <!-- 3. MÓDULO ANTECIPAÇÃO DE PARCELA -->
-      <div id="form-antecip" class="form-container" style="display: none;">
-        <div class="calc-card-title">Antecipação de Parcela Individual</div>
-        <div class="calc-card-desc">Calcule o desconto exato ao pagar a última parcela hoje (desconto a valor presente).</div>
-
-        <div class="form-grid">
+      <!-- Antecipação Individual -->
+      <div id="f-antecip" style="display:none;">
+        <div class="card-head">
+          <h2 class="card-title">Antecipação de Parcela</h2>
+          <p class="card-desc">Desconto por antecipar a última parcela do carnê hoje.</p>
+        </div>
+        <div class="grid-fields">
           <div>
-            <label class="field-label">Valor Original da Parcela (R$)</label>
-            <input type="number" id="ant-vlr" class="field-input" value="2850" step="50">
+            <label class="field-lbl">Valor no Carnê (R$)</label>
+            <input type="number" id="ant-val" class="field-inp" value="2850">
           </div>
           <div>
-            <label class="field-label">Quantos meses faltam para o vencimento?</label>
-            <input type="number" id="ant-meses" class="field-input" value="120">
+            <label class="field-lbl">Meses até o Vencimento</label>
+            <input type="number" id="ant-mes" class="field-inp" value="120">
           </div>
           <div>
-            <label class="field-label">Taxa Mensal de Juros (%)</label>
-            <input type="number" id="ant-taxa" class="field-input" value="0.85" step="0.05">
+            <label class="field-lbl">Taxa Mensal (%)</label>
+            <input type="number" id="ant-tax" class="field-inp" value="0.85" step="0.05">
           </div>
         </div>
       </div>
 
-      <!-- 4. MÓDULO VEICULAR -->
-      <div id="form-veic" class="form-container" style="display: none;">
-        <div class="calc-card-title">Simulação de Veículos (com TAC, IOF e CET)</div>
-        <div class="calc-card-desc">Cálculo de financiamento automotivo incluindo taxas de abertura de crédito e impostos.</div>
-
-        <div class="form-grid">
+      <!-- Veicular -->
+      <div id="f-veic" style="display:none;">
+        <div class="card-head">
+          <h2 class="card-title">Simulação Veicular</h2>
+          <p class="card-desc">Cálculo com TAC, IOF e Custo Efetivo Total (CET).</p>
+        </div>
+        <div class="grid-fields">
           <div>
-            <label class="field-label">Valor do Veículo (R$)</label>
-            <input type="number" id="veic-valor" class="field-input" value="85000" step="2000">
+            <label class="field-lbl">Valor Veículo (R$)</label>
+            <input type="number" id="veic-val" class="field-inp" value="85000">
           </div>
           <div>
-            <label class="field-label">Entrada (R$)</label>
-            <input type="number" id="veic-entrada" class="field-input" value="20000" step="2000">
+            <label class="field-lbl">Entrada (R$)</label>
+            <input type="number" id="veic-ent" class="field-inp" value="20000">
           </div>
           <div>
-            <label class="field-label">Taxa Mensal de Juros (%)</label>
-            <input type="number" id="veic-taxa" class="field-input" value="1.49" step="0.05">
+            <label class="field-lbl">Taxa Mensal (%)</label>
+            <input type="number" id="veic-tax" class="field-inp" value="1.49" step="0.05">
           </div>
           <div>
-            <label class="field-label">Prazo (Meses)</label>
-            <input type="number" id="veic-prazo" class="field-input" value="48">
+            <label class="field-lbl">Prazo (Meses)</label>
+            <input type="number" id="veic-prz" class="field-inp" value="48">
           </div>
           <div>
-            <label class="field-label">Tarifa de Abertura (TAC) (R$)</label>
-            <input type="number" id="veic-tac" class="field-input" value="1200">
+            <label class="field-lbl">TAC (R$)</label>
+            <input type="number" id="veic-tac" class="field-inp" value="1200">
           </div>
         </div>
       </div>
 
-      <!-- 5. MÓDULO CET -->
-      <div id="form-cet" class="form-container" style="display: none;">
-        <div class="calc-card-title">C.E.T. - Custo Efetivo Total</div>
-        <div class="calc-card-desc">Aferição do Custo Efetivo Real considerando encargos, IOF e seguros obrigatórios.</div>
-
-        <div class="form-grid">
+      <!-- CET -->
+      <div id="f-cet" style="display:none;">
+        <div class="card-head">
+          <h2 class="card-title">Custo Efetivo Total (CET)</h2>
+          <p class="card-desc">Aferição de encargos bancários e taxas administrativas.</p>
+        </div>
+        <div class="grid-fields">
           <div>
-            <label class="field-label">Valor Financiado Líquido (R$)</label>
-            <input type="number" id="cet-valor" class="field-input" value="450000" step="5000">
+            <label class="field-lbl">Financiado Líquido (R$)</label>
+            <input type="number" id="cet-val" class="field-inp" value="450000">
           </div>
           <div>
-            <label class="field-label">Valor da Parcela Mensal (R$)</label>
-            <input type="number" id="cet-parc" class="field-input" value="4800" step="50">
+            <label class="field-lbl">Prestação Mensal (R$)</label>
+            <input type="number" id="cet-par" class="field-inp" value="4800">
           </div>
           <div>
-            <label class="field-label">Nº de Prestações</label>
-            <input type="number" id="cet-meses" class="field-input" value="360">
+            <label class="field-lbl">Nº Prestações</label>
+            <input type="number" id="cet-mes" class="field-inp" value="360">
           </div>
           <div>
-            <label class="field-label">Tarifas Iniciais / Avaliação (R$)</label>
-            <input type="number" id="cet-tarifas" class="field-input" value="3500">
+            <label class="field-lbl">Tarifas / Seguros Iniciais (R$)</label>
+            <input type="number" id="cet-tar" class="field-inp" value="3500">
           </div>
         </div>
       </div>
 
-      <!-- Botões de Ação -->
-      <div class="actions-bar">
-        <button class="btn-submit" onclick="calcular()">
-          ⚡ CALCULAR & GERAR RELATÓRIO
-        </button>
-        <button class="btn-reset" onclick="resetForm()">
-          Limpar Valores
-        </button>
+      <div class="btn-row">
+        <button class="btn-action" onclick="calcular()">⚡ CALCULAR RELATÓRIO</button>
       </div>
 
     </section>
 
-    <!-- ÁREA DO RELATÓRIO COMPLETO GERADO -->
-    <section class="report-wrapper" id="relatorio-box">
-      
-      <div class="report-header">
+    <!-- Relatório Detalhado -->
+    <section class="report-card">
+      <div class="report-top">
         <div>
-          <div class="report-title" id="rep-titulo">Relatório Completo de Financiamento</div>
-          <div class="report-subtitle" id="rep-sub">Simulação detalhada para apresentação e fechamento de proposta.</div>
+          <h3 class="report-title" id="rep-title">Relatório de Simulação</h3>
+          <p style="font-size: 12px; color: var(--tx-muted);" id="rep-sub"></p>
         </div>
-        <div class="report-buttons">
-          <button class="btn-copy" onclick="copiarRelatorio()">
-            📋 Copiar Relatório p/ WhatsApp
-          </button>
-          <button class="btn-print" onclick="window.print()">
-            🖨️ Imprimir / PDF
-          </button>
+        <div class="report-btns">
+          <button class="btn-wpp-copy" onclick="copiar()">📋 Copiar p/ WhatsApp</button>
+          <button class="btn-print-outline" onclick="window.print()">🖨️ Imprimir</button>
         </div>
       </div>
 
-      <!-- Métricas Resumidas em Cards -->
-      <div class="metrics-summary-grid" id="rep-cards">
-        <!-- Preenchido via JavaScript -->
-      </div>
+      <div class="metrics-row" id="rep-metrics"></div>
 
-      <!-- Tabela Mês a Mês (Aparece no Imobiliário e Veicular) -->
-      <div id="rep-tabela-box">
-        <div style="font-size: 14px; font-weight: 800; color: var(--navy-950); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-          <span>Evolução Parcela por Parcela (Cronograma Financeiro)</span>
-          <span style="font-size: 12px; color: var(--tx-muted); font-weight: 600;" id="tabela-count"></span>
+      <!-- Tabela -->
+      <div id="tbl-wrapper">
+        <div style="font-size: 12px; font-weight: 700; color: var(--tx-muted); margin-bottom: 8px; text-transform: uppercase;">
+          Cronograma de Parcelas Mês a Mês
         </div>
-        <div class="table-container">
-          <table class="amort-table">
+        <div class="tbl-scroll-box">
+          <table class="tbl">
             <thead>
               <tr>
                 <th>Nº</th>
-                <th>Prestação (R$)</th>
-                <th>Amortização (R$)</th>
-                <th>Juros (R$)</th>
-                <th>Saldo Devedor (R$)</th>
+                <th>Prestação</th>
+                <th>Amortização</th>
+                <th>Juros</th>
+                <th>Saldo</th>
               </tr>
             </thead>
-            <tbody id="tabela-body">
-              <!-- Linhas geradas dinamicamente -->
-            </tbody>
+            <tbody id="tbl-body"></tbody>
           </table>
         </div>
       </div>
@@ -636,346 +568,223 @@
 
   </main>
 
-  <div class="toast-msg" id="toast">✓ Relatório copiado para a área de transferência!</div>
+  <div class="toast" id="toast">✓ Copiado para a área de transferência!</div>
 
   <script>
-    let currentMod = 'imob';
-    let relatorioTextoCopiar = '';
+    let cur = 'imob';
+    let copyText = '';
 
     const fmt = (v) => Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    const fmtNum = (v) => Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-    function setMod(mod) {
-      currentMod = mod;
-      document.querySelectorAll('.form-container').forEach(el => el.style.display = 'none');
-      document.querySelectorAll('.mod-btn').forEach(btn => btn.classList.remove('active'));
-      
-      document.getElementById('form-' + mod).style.display = 'block';
-      document.getElementById('tab-' + mod).classList.add('active');
+    function setMod(m) {
+      cur = m;
+      ['imob','quit','antecip','veic','cet'].forEach(id => {
+        document.getElementById('f-' + id).style.display = (id === m) ? 'block' : 'none';
+        document.getElementById('t-' + id).classList.toggle('active', id === m);
+      });
       calcular();
     }
 
     function calcular() {
-      if (currentMod === 'imob') calcImob();
-      else if (currentMod === 'quit') calcQuit();
-      else if (currentMod === 'antecip') calcAntecip();
-      else if (currentMod === 'veic') calcVeic();
-      else if (currentMod === 'cet') calcCet();
+      if (cur === 'imob') calcImob();
+      else if (cur === 'quit') calcQuit();
+      else if (cur === 'antecip') calcAntecip();
+      else if (cur === 'veic') calcVeic();
+      else if (cur === 'cet') calcCet();
     }
 
-    // 1. CÁLCULO IMOBILIÁRIO COM TABELA COMPLETA (SAC / PRICE)
     function calcImob() {
-      const valor = parseFloat(document.getElementById('imob-valor').value) || 0;
-      const entrada = parseFloat(document.getElementById('imob-entrada').value) || 0;
-      const taxaAnual = (parseFloat(document.getElementById('imob-taxa').value) || 9.9) / 100;
-      const meses = parseInt(document.getElementById('imob-prazo').value) || 360;
-      const sistema = document.getElementById('imob-sistema').value;
+      const v = parseFloat(document.getElementById('imob-val').value) || 0;
+      const e = parseFloat(document.getElementById('imob-ent').value) || 0;
+      const taxA = (parseFloat(document.getElementById('imob-tax').value) || 9.9) / 100;
+      const m = parseInt(document.getElementById('imob-prz').value) || 360;
+      const sis = document.getElementById('imob-sistema').value;
 
-      const financiado = Math.max(0, valor - entrada);
-      const taxaMensal = Math.pow(1 + taxaAnual, 1 / 12) - 1;
+      const fin = Math.max(0, v - e);
+      const taxM = Math.pow(1 + taxA, 1/12) - 1;
 
-      let saldoDevedor = financiado;
-      let totalJuros = 0;
-      let totalPago = 0;
-      let p1 = 0, pUlt = 0;
+      let saldo = fin;
+      let totJ = 0, totP = 0, p1 = 0, pUlt = 0;
+      let rows = '';
 
-      let htmlTabela = '';
-      const amortConstante = financiado / meses;
-      const parcelaPrice = financiado * (taxaMensal * Math.pow(1 + taxaMensal, meses)) / (Math.pow(1 + taxaMensal, meses) - 1);
+      const amortConst = fin / m;
+      const pPrice = fin * (taxM * Math.pow(1 + taxM, m)) / (Math.pow(1 + taxM, m) - 1);
 
-      for (let i = 1; i <= meses; i++) {
-        let jurosMes = saldoDevedor * taxaMensal;
-        let prestacao = 0;
-        let amortizacao = 0;
+      for (let i = 1; i <= m; i++) {
+        let jur = saldo * taxM;
+        let prest = 0, amort = 0;
 
-        if (sistema === 'sac') {
-          amortizacao = amortConstante;
-          prestacao = amortizacao + jurosMes;
-          saldoDevedor = Math.max(0, saldoDevedor - amortizacao);
+        if (sis === 'sac') {
+          amort = amortConst;
+          prest = amort + jur;
+          saldo = Math.max(0, saldo - amort);
         } else {
-          prestacao = parcelaPrice;
-          amortizacao = prestacao - jurosMes;
-          saldoDevedor = Math.max(0, saldoDevedor - amortizacao);
+          prest = pPrice;
+          amort = prest - jur;
+          saldo = Math.max(0, saldo - amort);
         }
 
-        if (i === 1) p1 = prestacao;
-        if (i === meses) pUlt = prestacao;
+        if (i === 1) p1 = prest;
+        if (i === m) pUlt = prest;
 
-        totalJuros += jurosMes;
-        totalPago += prestacao;
+        totJ += jur;
+        totP += prest;
 
-        htmlTabela += `
-          <tr>
-            <td>${i}º</td>
-            <td style="color: #0f172a; font-weight: 700;">${fmt(prestacao)}</td>
-            <td style="color: #2563eb;">${fmt(amortizacao)}</td>
-            <td style="color: #d97706;">${fmt(jurosMes)}</td>
-            <td style="color: #475569;">${fmt(saldoDevedor)}</td>
-          </tr>
-        `;
+        rows += `<tr>
+          <td>${i}</td>
+          <td style="color:var(--tx);font-weight:700;">${fmt(prest)}</td>
+          <td style="color:var(--accent);">${fmt(amort)}</td>
+          <td>${fmt(jur)}</td>
+          <td style="color:var(--tx-muted);">${fmt(saldo)}</td>
+        </tr>`;
       }
 
-      document.getElementById('rep-titulo').innerText = `Relatório de Financiamento Imobiliário (${sistema.toUpperCase()})`;
-      document.getElementById('rep-sub').innerText = `Imóvel de ${fmt(valor)} com entrada de ${fmt(entrada)} (${Math.round((entrada/valor)*100)}%) em ${meses} meses.`;
+      document.getElementById('rep-title').innerText = `Relatório Imobiliário (${sis.toUpperCase()})`;
+      document.getElementById('rep-sub').innerText = `Imóvel: ${fmt(v)} · Entrada: ${fmt(e)} · ${m} meses`;
 
-      document.getElementById('rep-cards').innerHTML = `
-        <div class="metric-card">
-          <small>Valor Financiado</small>
-          <strong>${fmt(financiado)}</strong>
-        </div>
-        <div class="metric-card highlight">
-          <small>1ª Prestação</small>
-          <strong>${fmt(p1)}</strong>
-        </div>
-        <div class="metric-card highlight">
-          <small>Última Prestação</small>
-          <strong>${fmt(pUlt)}</strong>
-        </div>
-        <div class="metric-card">
-          <small>Total em Juros</small>
-          <strong style="color: #b45309;">${fmt(totalJuros)}</strong>
-        </div>
-        <div class="metric-card">
-          <small>Total Final a Pagar</small>
-          <strong>${fmt(totalPago)}</strong>
-        </div>
-        <div class="metric-card">
-          <small>Taxa Efetiva Mensal</small>
-          <strong style="color: #2563eb;">${(taxaMensal * 100).toFixed(4)}% a.m.</strong>
-        </div>
+      document.getElementById('rep-metrics').innerHTML = `
+        <div class="metric-item"><small>Financiado</small><strong>${fmt(fin)}</strong></div>
+        <div class="metric-item focus"><small>1ª Parcela</small><strong>${fmt(p1)}</strong></div>
+        <div class="metric-item focus"><small>Última Parcela</small><strong>${fmt(pUlt)}</strong></div>
+        <div class="metric-item"><small>Total de Juros</small><strong>${fmt(totJ)}</strong></div>
+        <div class="metric-item"><small>Total a Pagar</small><strong>${fmt(totP)}</strong></div>
       `;
 
-      document.getElementById('tabela-body').innerHTML = htmlTabela;
-      document.getElementById('tabela-count').innerText = `${meses} parcelas simuladas`;
-      document.getElementById('rep-tabela-box').style.display = 'block';
+      document.getElementById('tbl-body').innerHTML = rows;
+      document.getElementById('tbl-wrapper').style.display = 'block';
 
-      // Monta texto de cópia para WhatsApp
-      relatorioTextoCopiar = `📊 *SIMULAÇÃO DE FINANCIAMENTO - ROSEBEL LOPES*
-🏡 *Valor do Imóvel:* ${fmt(valor)}
-💵 *Entrada:* ${fmt(entrada)} (${Math.round((entrada/valor)*100)}%)
-🏦 *Valor Financiado:* ${fmt(financiado)}
-🗓️ *Prazo:* ${meses} meses (${meses/12} anos) - Sistema *${sistema.toUpperCase()}*
-📈 *Taxa de Juros:* ${(taxaAnual*100).toFixed(2)}% a.a.
-
-📌 *Resumo das Prestações:*
+      copyText = `📊 *SIMULAÇÃO IMOBILIÁRIA - ROSEBEL LOPES*
+🏡 *Imóvel:* ${fmt(v)}
+💵 *Entrada:* ${fmt(e)} (${Math.round((e/v)*100)}%)
+🏦 *Financiado:* ${fmt(fin)}
+🗓️ *Prazo:* ${m} meses - Sistema *${sis.toUpperCase()}*
 • *1ª Parcela:* ${fmt(p1)}
 • *Última Parcela:* ${fmt(pUlt)}
-• *Total em Juros:* ${fmt(totalJuros)}
-• *Total a ser pago:* ${fmt(totalPago)}
+• *Total em Juros:* ${fmt(totJ)}
+• *Total a Pagar:* ${fmt(totP)}
 
-_Simulação calculada com as normas oficiais de crédito bancário. Vamos aprovar sua proposta?_
-👉 *Rosebel Lopes · Consultoria Imobiliária*`;
+_Rosebel Lopes · Consultoria Imobiliária_`;
     }
 
-    // 2. QUITAÇÃO DE FINANCIAMENTO
     function calcQuit() {
-      const saldo = parseFloat(document.getElementById('quit-saldo').value) || 0;
-      const vlrParc = parseFloat(document.getElementById('quit-vlr-parc').value) || 0;
-      const parcelas = parseInt(document.getElementById('quit-qtd-parc').value) || 0;
-      const taxaAnual = (parseFloat(document.getElementById('quit-taxa').value) || 10) / 100;
-      const taxaMensal = Math.pow(1 + taxaAnual, 1/12) - 1;
+      const s = parseFloat(document.getElementById('quit-sal').value) || 0;
+      const p = parseFloat(document.getElementById('quit-parc').value) || 0;
+      const q = parseInt(document.getElementById('quit-qtd').value) || 0;
+      const tA = (parseFloat(document.getElementById('quit-tax').value) || 10) / 100;
+      const tM = Math.pow(1 + tA, 1/12) - 1;
 
-      // Valor presente das parcelas futuras restantes
-      const valorPresente = vlrParc * ( (1 - Math.pow(1 + taxaMensal, -parcelas)) / taxaMensal );
-      const totalContratualSemDesconto = vlrParc * parcelas;
-      const economiaJuros = Math.max(0, totalContratualSemDesconto - valorPresente);
+      const vp = p * ((1 - Math.pow(1 + tM, -q)) / tM);
+      const semDesconto = p * q;
+      const econ = Math.max(0, semDesconto - vp);
 
-      document.getElementById('rep-titulo').innerText = 'Relatório de Quitação Antecipada de Financiamento';
-      document.getElementById('rep-sub').innerText = `Cálculo de deságio e abatimento de juros para quitação de ${parcelas} parcelas a vencer.`;
+      document.getElementById('rep-title').innerText = 'Quitação Antecipada';
+      document.getElementById('rep-sub').innerText = `Liquidação de ${q} parcelas de ${fmt(p)}`;
 
-      document.getElementById('rep-cards').innerHTML = `
-        <div class="metric-card">
-          <small>Parcelas a Vencer</small>
-          <strong>${parcelas}x de ${fmt(vlrParc)}</strong>
-        </div>
-        <div class="metric-card">
-          <small>Total s/ Desconto</small>
-          <strong>${fmt(totalContratualSemDesconto)}</strong>
-        </div>
-        <div class="metric-card highlight">
-          <small>Valor Real p/ Quitar Hoje</small>
-          <strong style="color: #16a34a;">${fmt(valorPresente)}</strong>
-        </div>
-        <div class="metric-card highlight">
-          <small>Economia de Juros</small>
-          <strong style="color: #b45309;">${fmt(economiaJuros)}</strong>
-        </div>
+      document.getElementById('rep-metrics').innerHTML = `
+        <div class="metric-item"><small>Total s/ Desconto</small><strong>${fmt(semDesconto)}</strong></div>
+        <div class="metric-item focus"><small>Pagar Hoje</small><strong>${fmt(vp)}</strong></div>
+        <div class="metric-item focus"><small>Economia de Juros</small><strong>${fmt(econ)}</strong></div>
       `;
+      document.getElementById('tbl-wrapper').style.display = 'none';
 
-      document.getElementById('rep-tabela-box').style.display = 'none';
-
-      relatorioTextoCopiar = `💰 *RELATÓRIO DE QUITAÇÃO ANTECIPADA - ROSEBEL LOPES*
-📄 *Parcelas Restantes:* ${parcelas}x de ${fmt(vlrParc)}
-💵 *Total Contratual sem Desconto:* ${fmt(totalContratualSemDesconto)}
-✅ *Valor com Desconto p/ Quitar Hoje:* ${fmt(valorPresente)}
-🎉 *ECONOMIA DE JUROS:* ${fmt(economiaJuros)}
-
-_O Código de Defesa do Consumidor garante o abatimento proporcional de todos os juros futuros para quitação antecipada._`;
+      copyText = `💰 *QUITAÇÃO ANTECIPADA - ROSEBEL LOPES*
+📄 *Parcelas:* ${q}x de ${fmt(p)}
+💵 *Total Sem Desconto:* ${fmt(semDesconto)}
+✅ *Valor com Desconto Hoje:* ${fmt(vp)}
+🎉 *ECONOMIA DE JUROS:* ${fmt(econ)}`;
     }
 
-    // 3. ANTECIPAÇÃO DE PARCELA INDIVIDUAL
     function calcAntecip() {
-      const vlr = parseFloat(document.getElementById('ant-vlr').value) || 0;
-      const meses = parseInt(document.getElementById('ant-meses').value) || 1;
-      const taxaMensal = (parseFloat(document.getElementById('ant-taxa').value) || 1) / 100;
+      const v = parseFloat(document.getElementById('ant-val').value) || 0;
+      const m = parseInt(document.getElementById('ant-mes').value) || 1;
+      const t = (parseFloat(document.getElementById('ant-tax').value) || 1) / 100;
 
-      // Desconto a valor presente
-      const valorPresente = vlr / Math.pow(1 + taxaMensal, meses);
-      const desconto = vlr - valorPresente;
+      const vp = v / Math.pow(1 + t, m);
+      const desc = v - vp;
 
-      document.getElementById('rep-titulo').innerText = 'Relatório de Antecipação de Parcela (De Trás para Frente)';
-      document.getElementById('rep-sub').innerText = `Simulação de pagamento da parcela que venceria daqui a ${meses} meses.`;
+      document.getElementById('rep-title').innerText = 'Antecipação de Parcela';
+      document.getElementById('rep-sub').innerText = `Antecipar parcela com vencimento em ${m} meses`;
 
-      document.getElementById('rep-cards').innerHTML = `
-        <div class="metric-card">
-          <small>Valor da Parcela no Carnê</small>
-          <strong>${fmt(vlr)}</strong>
-        </div>
-        <div class="metric-card highlight">
-          <small>Valor a Pagar Hoje</small>
-          <strong style="color: #16a34a;">${fmt(valorPresente)}</strong>
-        </div>
-        <div class="metric-card highlight">
-          <small>Desconto de Juros Imediato</small>
-          <strong style="color: #b45309;">${fmt(desconto)}</strong>
-        </div>
-        <div class="metric-card">
-          <small>Economia Percentual</small>
-          <strong>${((desconto / vlr) * 100).toFixed(1)}%</strong>
-        </div>
+      document.getElementById('rep-metrics').innerHTML = `
+        <div class="metric-item"><small>Valor no Carnê</small><strong>${fmt(v)}</strong></div>
+        <div class="metric-item focus"><small>Valor Hoje</small><strong>${fmt(vp)}</strong></div>
+        <div class="metric-item focus"><small>Desconto</small><strong>${fmt(desc)}</strong></div>
       `;
+      document.getElementById('tbl-wrapper').style.display = 'none';
 
-      document.getElementById('rep-tabela-box').style.display = 'none';
-
-      relatorioTextoCopiar = `📅 *ANTECIPAÇÃO DE PARCELA - ROSEBEL LOPES*
-• *Valor no Carnê:* ${fmt(vlr)}
-• *Meses Antecipados:* ${meses} meses
-• *Valor com Desconto hoje:* ${fmt(valorPresente)}
-• *Economia direta de juros:* ${fmt(desconto)} (${((desconto / vlr) * 100).toFixed(1)}% OFF)`;
+      copyText = `📅 *ANTECIPAÇÃO DE PARCELA - ROSEBEL LOPES*
+• *Valor no Carnê:* ${fmt(v)}
+• *Meses Antecipados:* ${m} meses
+• *Pagar Hoje:* ${fmt(vp)}
+• *Economia:* ${fmt(desc)} (${((desc/v)*100).toFixed(1)}% OFF)`;
     }
 
-    // 4. VEICULAR COM TAC E IOF
     function calcVeic() {
-      const valor = parseFloat(document.getElementById('veic-valor').value) || 0;
-      const entrada = parseFloat(document.getElementById('veic-entrada').value) || 0;
-      const taxaMensal = (parseFloat(document.getElementById('veic-taxa').value) || 1.49) / 100;
-      const prazo = parseInt(document.getElementById('veic-prazo').value) || 48;
+      const v = parseFloat(document.getElementById('veic-val').value) || 0;
+      const e = parseFloat(document.getElementById('veic-ent').value) || 0;
+      const tM = (parseFloat(document.getElementById('veic-tax').value) || 1.49) / 100;
+      const p = parseInt(document.getElementById('veic-prz').value) || 48;
       const tac = parseFloat(document.getElementById('veic-tac').value) || 0;
 
-      const liquido = Math.max(0, valor - entrada);
-      // IOF aproximado padrão Brasil: 0.38% abertura + 0.0082% diário (aprox ~ 2.5% no total)
-      const iof = liquido * 0.028;
-      const totalFinanciado = liquido + tac + iof;
+      const liq = Math.max(0, v - e);
+      const iof = liq * 0.028;
+      const totFin = liq + tac + iof;
 
-      const parcela = totalFinanciado * (taxaMensal * Math.pow(1 + taxaMensal, prazo)) / (Math.pow(1 + taxaMensal, prazo) - 1);
-      const totalFinal = parcela * prazo;
-      const jurosTotais = totalFinal - totalFinanciado;
+      const parc = totFin * (tM * Math.pow(1 + tM, p)) / (Math.pow(1 + tM, p) - 1);
+      const totFinal = parc * p;
 
-      // CET aproximado
-      const cetMensal = taxaMensal * 1.12;
-      const cetAnual = (Math.pow(1 + cetMensal, 12) - 1) * 100;
+      document.getElementById('rep-title').innerText = 'Crédito Veicular';
+      document.getElementById('rep-sub').innerText = `Veículo de ${fmt(v)} · ${p} parcelas`;
 
-      document.getElementById('rep-titulo').innerText = 'Relatório de Crédito Veicular (com TAC, IOF e CET)';
-      document.getElementById('rep-sub').innerText = `Veículo de ${fmt(valor)} com ${fmt(entrada)} de entrada em ${prazo} parcelas.`;
-
-      document.getElementById('rep-cards').innerHTML = `
-        <div class="metric-card">
-          <small>Valor Líquido</small>
-          <strong>${fmt(liquido)}</strong>
-        </div>
-        <div class="metric-card highlight">
-          <small>Parcela Mensal Fixa</small>
-          <strong>${prazo}x de ${fmt(parcela)}</strong>
-        </div>
-        <div class="metric-card">
-          <small>Tarifas + IOF</small>
-          <strong>${fmt(tac + iof)}</strong>
-        </div>
-        <div class="metric-card">
-          <small>C.E.T. Anual Estimado</small>
-          <strong style="color: #2563eb;">${cetAnual.toFixed(2)}% a.a.</strong>
-        </div>
-        <div class="metric-card highlight">
-          <small>Custo Total Final</small>
-          <strong style="color: #b45309;">${fmt(totalFinal + entrada)}</strong>
-        </div>
+      document.getElementById('rep-metrics').innerHTML = `
+        <div class="metric-item"><small>Valor Financiado</small><strong>${fmt(totFin)}</strong></div>
+        <div class="metric-item focus"><small>Parcela Fixa</small><strong>${p}x de ${fmt(parc)}</strong></div>
+        <div class="metric-item"><small>TAC + IOF</small><strong>${fmt(tac + iof)}</strong></div>
+        <div class="metric-item focus"><small>Total Final</small><strong>${fmt(totFinal + e)}</strong></div>
       `;
+      document.getElementById('tbl-wrapper').style.display = 'none';
 
-      document.getElementById('rep-tabela-box').style.display = 'none';
-
-      relatorioTextoCopiar = `🚗 *SIMULAÇÃO VEICULAR - ROSEBEL LOPES*
-🚘 *Valor do Veículo:* ${fmt(valor)}
-💵 *Entrada:* ${fmt(entrada)}
-📌 *Condição:* ${prazo}x de ${fmt(parcela)}
-📑 *TAC + IOF:* ${fmt(tac + iof)}
-📊 *CET Anual Estimado:* ${cetAnual.toFixed(2)}% a.a.
-💰 *Valor Final com Juros:* ${fmt(totalFinal + entrada)}`;
+      copyText = `🚗 *SIMULAÇÃO VEICULAR - ROSEBEL LOPES*
+🚘 *Valor:* ${fmt(v)} · *Entrada:* ${fmt(e)}
+📌 *Condição:* ${p}x de ${fmt(parc)}
+💰 *Total com Juros:* ${fmt(totFinal + e)}`;
     }
 
-    // 5. CUSTO EFETIVO TOTAL (CET)
     function calcCet() {
-      const valor = parseFloat(document.getElementById('cet-valor').value) || 0;
-      const parcela = parseFloat(document.getElementById('cet-parc').value) || 0;
-      const meses = parseInt(document.getElementById('cet-meses').value) || 360;
-      const tarifas = parseFloat(document.getElementById('cet-tarifas').value) || 0;
+      const v = parseFloat(document.getElementById('cet-val').value) || 0;
+      const p = parseFloat(document.getElementById('cet-par').value) || 0;
+      const m = parseInt(document.getElementById('cet-mes').value) || 360;
+      const tar = parseFloat(document.getElementById('cet-tar').value) || 0;
 
-      const totalPago = parcela * meses;
-      const juros = totalPago - valor;
-      const taxaAprox = ((totalPago / (valor - tarifas)) - 1) / (meses / 12) * 100;
+      const totP = p * m;
+      const taxA = ((totP / (v - tar)) - 1) / (m / 12) * 100;
 
-      document.getElementById('rep-titulo').innerText = 'Aferição do Custo Efetivo Total (C.E.T.)';
-      document.getElementById('rep-sub').innerText = `Análise do custo real do dinheiro incluindo taxas administrativas e encargos.`;
+      document.getElementById('rep-title').innerText = 'Demonstrativo CET';
+      document.getElementById('rep-sub').innerText = `Custo Efetivo Real do empréstimo`;
 
-      document.getElementById('rep-cards').innerHTML = `
-        <div class="metric-card">
-          <small>Valor Liberado</small>
-          <strong>${fmt(valor)}</strong>
-        </div>
-        <div class="metric-card">
-          <small>Tarifas e Seguros Iniciais</small>
-          <strong>${fmt(tarifas)}</strong>
-        </div>
-        <div class="metric-card highlight">
-          <small>Custo Efetivo Total Estimado</small>
-          <strong style="color: #2563eb;">~${taxaAprox.toFixed(2)}% a.a.</strong>
-        </div>
-        <div class="metric-card highlight">
-          <small>Total Pago no Prazo</small>
-          <strong style="color: #b45309;">${fmt(totalPago)}</strong>
-        </div>
+      document.getElementById('rep-metrics').innerHTML = `
+        <div class="metric-item"><small>Financiado</small><strong>${fmt(v)}</strong></div>
+        <div class="metric-item focus"><small>CET Estimado</small><strong>~${taxA.toFixed(2)}% a.a.</strong></div>
+        <div class="metric-item focus"><small>Total Pago</small><strong>${fmt(totP)}</strong></div>
       `;
+      document.getElementById('tbl-wrapper').style.display = 'none';
 
-      document.getElementById('rep-tabela-box').style.display = 'none';
-
-      relatorioTextoCopiar = `📑 *DEMONSTRATIVO DE C.E.T. - ROSEBEL LOPES*
-• *Valor Financiado:* ${fmt(valor)}
-• *Parcela Mensal:* ${fmt(parcela)} (${meses} meses)
-• *Tarifas/Seguros Embutidos:* ${fmt(tarifas)}
-• *Custo Efetivo Total Estimado:* ~${taxaAprox.toFixed(2)}% ao ano
-• *Total Final:* ${fmt(totalPago)}`;
+      copyText = `📑 *DEMONSTRATIVO DE C.E.T. - ROSEBEL LOPES*
+• *Valor:* ${fmt(v)}
+• *Parcela:* ${fmt(p)} (${m} meses)
+• *CET Estimado:* ~${taxA.toFixed(2)}% ao ano
+• *Total Final:* ${fmt(totP)}`;
     }
 
-    function copiarRelatorio() {
-      navigator.clipboard.writeText(relatorioTextoCopiar).then(() => {
-        const toast = document.getElementById('toast');
-        toast.style.display = 'block';
-        setTimeout(() => toast.style.display = 'none', 3000);
+    function copiar() {
+      navigator.clipboard.writeText(copyText).then(() => {
+        const t = document.getElementById('toast');
+        t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 2500);
       });
     }
 
-    function resetForm() {
-      if (currentMod === 'imob') {
-        document.getElementById('imob-valor').value = 650000;
-        document.getElementById('imob-entrada').value = 130000;
-        document.getElementById('imob-taxa').value = 9.90;
-        document.getElementById('imob-prazo').value = 360;
-      }
-      calcular();
-    }
-
-    // Inicialização direta
     calcular();
   </script>
-
 </body>
 </html>
