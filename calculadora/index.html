@@ -256,6 +256,52 @@
       margin: 16px 0 12px;
     }
 
+    /* Grid de Métricas para Abas Secundárias */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .metric-box {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .metric-box .label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--tx-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .metric-box .val {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent);
+      font-feature-settings: "tnum";
+    }
+    .metric-box.highlight {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: rgba(56, 189, 248, 0.07);
+    }
+    .metric-box.highlight .val {
+      color: #38bdf8;
+      font-size: 21px;
+    }
+    .metric-box.success {
+      border-color: rgba(74, 222, 128, 0.35);
+      background: rgba(74, 222, 128, 0.07);
+    }
+    .metric-box.success .val {
+      color: #4ade80;
+      font-size: 21px;
+    }
+
     /* Relatório */
     .report-card {
       background: var(--surface);
@@ -539,13 +585,13 @@
       </div>
 
       <div class="btn-row">
-        <button class="btn-action" onclick="calcular()">⚡ CALCULAR RELATÓRIO</button>
+        <button type="button" class="btn-action" onclick="calcular()">⚡ CALCULAR RELATÓRIO</button>
       </div>
 
     </section>
 
     <!-- Relatório Detalhado -->
-    <section class="report-card">
+    <section class="report-card" id="report-card">
       <div class="report-top">
         <div>
           <h3 class="report-title" id="rep-title">Relatório de Simulação</h3>
@@ -556,6 +602,9 @@
           <button class="btn-print-outline" onclick="window.print()">🖨️ Imprimir</button>
         </div>
       </div>
+
+      <!-- Resumo Detalhado p/ Abas Secundárias -->
+      <div id="non-imob-results" style="display:none;"></div>
 
       <!-- Header Resumo Idêntico ao APK -->
       <div class="apk-summary-banner" id="apk-banner">
@@ -654,7 +703,7 @@
       const taxA = parseFloat(document.getElementById('imob-tax').value) || 9.0;
       const tr = parseFloat(document.getElementById('imob-tr').value) || 0.0;
       const n = parseInt(document.getElementById('imob-prz').value) || 180;
-      const sis = document.getElementById('imob-sistema').value;
+      const sis = document.getElementById('imob-sis').value;
 
       // Taxa mensal composta oficial de juros do contrato + TR
       const i_m = Math.pow(1 + (taxA / 100), 1 / 12) - 1 + (tr / 100);
@@ -707,6 +756,7 @@
       document.getElementById('rep-sub').innerText = `${n} prestações simuladas com seguro e taxa de administração inclusos.`;
 
       document.getElementById('tbl-body').innerHTML = rows;
+      document.getElementById('non-imob-results').style.display = 'none';
       document.getElementById('apk-banner').style.display = 'block';
       document.getElementById('sys-pill').style.display = 'block';
       document.getElementById('tbl-wrapper').style.display = 'block';
@@ -719,6 +769,8 @@
 • *Saldo após 1ª parc:* ${fmt(v - (sis === 'price' ? (pmt_pura - (v * i_m)) : amort_sac))}
 
 _Simulação calculada com as normas oficiais da Caixa / SFH com encargos inclusos._`;
+
+      document.getElementById('report-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // 2. QUITAÇÃO
@@ -740,11 +792,35 @@ _Simulação calculada com as normas oficiais da Caixa / SFH com encargos inclus
       document.getElementById('rep-title').innerText = 'Quitação Antecipada';
       document.getElementById('rep-sub').innerText = `Liquidação de ${q} parcelas de ${fmt(p)}`;
 
+      document.getElementById('non-imob-results').style.display = 'block';
+      document.getElementById('non-imob-results').innerHTML = `
+        <div class="metrics-grid">
+          <div class="metric-box success">
+            <span class="label">Valor p/ Quitar Hoje</span>
+            <span class="val">${fmt(vp)}</span>
+          </div>
+          <div class="metric-box highlight">
+            <span class="label">Economia de Juros</span>
+            <span class="val">${fmt(econ)}</span>
+          </div>
+          <div class="metric-box">
+            <span class="label">Total Sem Desconto</span>
+            <span class="val">${fmt(semDesconto)}</span>
+          </div>
+          <div class="metric-box">
+            <span class="label">Parcelas Restantes</span>
+            <span class="val">${q}x de ${fmt(p)}</span>
+          </div>
+        </div>
+      `;
+
       copyText = `💰 *QUITAÇÃO ANTECIPADA - ROSEBEL LOPES*
 📄 *Parcelas:* ${q}x de ${fmt(p)}
 💵 *Total Sem Desconto:* ${fmt(semDesconto)}
 ✅ *Valor com Desconto Hoje:* ${fmt(vp)}
 🎉 *ECONOMIA DE JUROS:* ${fmt(econ)}`;
+
+      document.getElementById('report-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // 3. ANTECIPAÇÃO
@@ -761,13 +837,37 @@ _Simulação calculada com as normas oficiais da Caixa / SFH com encargos inclus
       document.getElementById('tbl-wrapper').style.display = 'none';
 
       document.getElementById('rep-title').innerText = 'Antecipação de Parcela';
-      document.getElementById('rep-sub').innerText = `Vencimento em ${m} meses`;
+      document.getElementById('rep-sub').innerText = `Vencimento em ${m} meses à taxa de ${(t * 100).toFixed(2)}% a.m.`;
+
+      document.getElementById('non-imob-results').style.display = 'block';
+      document.getElementById('non-imob-results').innerHTML = `
+        <div class="metrics-grid">
+          <div class="metric-box success">
+            <span class="label">Valor a Pagar Hoje</span>
+            <span class="val">${fmt(vp)}</span>
+          </div>
+          <div class="metric-box highlight">
+            <span class="label">Desconto / Economia</span>
+            <span class="val">${fmt(desc)} (${((desc / v) * 100).toFixed(1)}% OFF)</span>
+          </div>
+          <div class="metric-box">
+            <span class="label">Valor no Carnê</span>
+            <span class="val">${fmt(v)}</span>
+          </div>
+          <div class="metric-box">
+            <span class="label">Prazo Antecipado</span>
+            <span class="val">${m} meses</span>
+          </div>
+        </div>
+      `;
 
       copyText = `📅 *ANTECIPAÇÃO DE PARCELA - ROSEBEL LOPES*
 • *Valor no Carnê:* ${fmt(v)}
 • *Meses Antecipados:* ${m} meses
 • *Pagar Hoje:* ${fmt(vp)}
 • *Economia:* ${fmt(desc)} (${((desc/v)*100).toFixed(1)}% OFF)`;
+
+      document.getElementById('report-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // 4. VEICULAR
@@ -792,10 +892,34 @@ _Simulação calculada com as normas oficiais da Caixa / SFH com encargos inclus
       document.getElementById('rep-title').innerText = 'Crédito Veicular';
       document.getElementById('rep-sub').innerText = `Veículo de ${fmt(v)} · ${p} parcelas de ${fmt(parc)}`;
 
+      document.getElementById('non-imob-results').style.display = 'block';
+      document.getElementById('non-imob-results').innerHTML = `
+        <div class="metrics-grid">
+          <div class="metric-box highlight">
+            <span class="label">Prestação Mensal</span>
+            <span class="val">${fmt(parc)}</span>
+          </div>
+          <div class="metric-box">
+            <span class="label">Total Financiado (c/ juros)</span>
+            <span class="val">${fmt(totFinal)}</span>
+          </div>
+          <div class="metric-box">
+            <span class="label">Total Geral (c/ Entrada)</span>
+            <span class="val">${fmt(totFinal + e)}</span>
+          </div>
+          <div class="metric-box">
+            <span class="label">Entrada + Custos (TAC/IOF)</span>
+            <span class="val">${fmt(e)} + ${fmt(tac + iof)}</span>
+          </div>
+        </div>
+      `;
+
       copyText = `🚗 *SIMULAÇÃO VEICULAR - ROSEBEL LOPES*
 🚘 *Valor:* ${fmt(v)} · *Entrada:* ${fmt(e)}
 📌 *Condição:* ${p}x de ${fmt(parc)}
 💰 *Total com Juros:* ${fmt(totFinal + e)}`;
+
+      document.getElementById('report-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // 5. CET
@@ -815,10 +939,34 @@ _Simulação calculada com as normas oficiais da Caixa / SFH com encargos inclus
       document.getElementById('rep-title').innerText = 'Demonstrativo C.E.T.';
       document.getElementById('rep-sub').innerText = `Aferição do custo efetivo real`;
 
+      document.getElementById('non-imob-results').style.display = 'block';
+      document.getElementById('non-imob-results').innerHTML = `
+        <div class="metrics-grid">
+          <div class="metric-box highlight">
+            <span class="label">C.E.T. Anual Estimado</span>
+            <span class="val">~${taxA.toFixed(2)}% a.a.</span>
+          </div>
+          <div class="metric-box">
+            <span class="label">Total das Prestações</span>
+            <span class="val">${fmt(totP)}</span>
+          </div>
+          <div class="metric-box">
+            <span class="label">Valor Líquido Financiado</span>
+            <span class="val">${fmt(v)}</span>
+          </div>
+          <div class="metric-box">
+            <span class="label">Tarifas / Seguros Embutidos</span>
+            <span class="val">${fmt(tar)}</span>
+          </div>
+        </div>
+      `;
+
       copyText = `📑 *DEMONSTRATIVO DE C.E.T. - ROSEBEL LOPES*
 • *Valor:* ${fmt(v)}
 • *Parcela:* ${fmt(p)} (${m} meses)
 • *Custo Efetivo Total:* ~${taxA.toFixed(2)}% ao ano`;
+
+      document.getElementById('report-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function copiar() {
